@@ -4,7 +4,7 @@
     <img alt="Microchip Logo." src="images/microchip_logo_black_red.png">
 </picture> 
 
-## %repoDescritpion%
+## mclv48v300w 33ak512mc510 pmsm an1292 foc pll triple motor
 
 Board Image if any.
 
