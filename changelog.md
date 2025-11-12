@@ -1,3 +1,8 @@
+# mclv48v300w-33ak512mc510-pmsm-an1292-foc-pll-triple-motor v1.0.1
+### Release Highlights
+- Minor bug fix to bootstrap
+- Minor improvement to rotor lock
+
 # mclv48v300w-33ak512mc510-pmsm-an1292-foc-pll-triple-motor v1.0.0
 ### Release Highlights
 This is the first version of code for driving **three** Permanent Magnet Synchronous Motors (PMSM) with [dsPIC33AK512MC510](https://www.microchip.com/en-us/product/dsPIC33AK512MC510), using Sensorless Field Oriented Control (FOC) and PLL Estimator Algorithm. The demonstration is set up on the hardware platform [EV18H47A](https://www.microchip.com/en-us/development-tool/ev18h47a) "MCLV-48V-300W Development Board"  and [EV67N21A](https://www.microchip.com/en-us/development-tool/ev67n21a) "dsPIC33AK512MC510 Motor Control Dual In-line Module (DIM)".

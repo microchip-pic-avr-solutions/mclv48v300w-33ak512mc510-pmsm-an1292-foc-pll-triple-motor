@@ -100,7 +100,9 @@ typedef struct
     
     uint8_t
         faultStatus,        /* Fault Status */
-        focState;           /* FOC State */       
+        focState,           /* FOC State */ 
+        voltageCommandOverride; /* Flag to override vd/vq voltage commands or 
+                                 * to bypass current controllers in the FOC forward path */
     
     MC_PI_T
         piIq,               /* Parameters for PI Q axis controllers */

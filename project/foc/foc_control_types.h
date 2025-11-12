@@ -71,8 +71,9 @@ typedef struct
         targetSpeed,                /* Speed Reference command*/
         CLSpeedRampRate,            /* Ramp Reference for Speed */
         idRef,                      /* D axis Current Reference Value */                 
-        iqRef;                      /* Q axis Current Reference Value */
-    
+        iqRef,                      /* Q axis Current Reference Value */
+        vdCmd,                      /* D axis Voltage Override command */ 
+        vqCmd;                      /* Q axis Voltage Override command */
     float
         MaxVoltageSquare;           /* Maximum voltage limit square*/
         
