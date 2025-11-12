@@ -52,9 +52,7 @@ To clone or download this application firmware on GitHub,
 - 24V 3-Phase ACT Brushless DC Motor [(ACT 57BLF02)](https://www.act-motor.com/brushless-dc-motor-57blf-product/)
 
 > **Note:** </br>
-> [EV18H47A](https://www.microchip.com/en-us/development-tool/ev18h47a), [EV67N21A](https://www.microchip.com/en-us/development-tool/ev67n21a), [AC300022](https://www.microchip.com/en-us/development-tool/AC300022),  and [AC300020](https://www.microchip.com/en-us/development-tool/AC300020) are available at [microchip DIRECT](https://www.microchipdirect.com/).
-</br>
-The motors are referred as follows in the firmware
+> [EV18H47A](https://www.microchip.com/en-us/development-tool/ev18h47a), [EV67N21A](https://www.microchip.com/en-us/development-tool/ev67n21a), [AC300022](https://www.microchip.com/en-us/development-tool/AC300022),  and [AC300020](https://www.microchip.com/en-us/development-tool/AC300020) are available at [microchip DIRECT](https://www.microchipdirect.com/). The motors are referred as follows in the firmware
 >- Hurst DMA0204024B101(AC300022) is referred as Hurst300 or Long Hurst
 >- Hurst DMB0224C10002(AC300020) is referred as Hurst075 or Short Hurst
 >- Leadshine Servo Motor ELVM6020V24FH-B25-HD is referred as leadshine24v
