@@ -935,6 +935,10 @@ uint8_t HAL_MC1BootstrapChargeRoutine(MC_DUTYCYCLEOUT_T *pDuty,HAL_BOOTSTRAP_T *
             /* Bootstrap sequence is complete, wait in this state */
             returnState = 1;
             HAL_MC1PWMDisableOutputs();
+            /* Reseting the duty to Minimum Duty after bootstrap Completion */
+            pDuty->dutycycle1 = MC1_MIN_DUTY;
+            pDuty->dutycycle2 = MC1_MIN_DUTY;
+            pDuty->dutycycle3 = MC1_MIN_DUTY;
             break;  
     }
 
@@ -1043,6 +1047,10 @@ uint8_t HAL_MC2BootstrapChargeRoutine(MC_DUTYCYCLEOUT_T *pDuty,HAL_BOOTSTRAP_T *
             /* Bootstrap sequence is complete, wait in this state */
             returnState = 1;
             HAL_MC2PWMDisableOutputs();
+            /* Reseting the duty to Minimum Duty after bootstrap Completion */
+            pDuty->dutycycle1 = MC2_MIN_DUTY;
+            pDuty->dutycycle2 = MC2_MIN_DUTY;
+            pDuty->dutycycle3 = MC2_MIN_DUTY;
             break;  
     }
 
@@ -1151,6 +1159,10 @@ uint8_t HAL_MC3BootstrapChargeRoutine(MC_DUTYCYCLEOUT_T *pDuty,HAL_BOOTSTRAP_T *
             /* Bootstrap sequence is complete, wait in this state */
             returnState = 1;
             HAL_MC3PWMDisableOutputs();
+            /* Reseting the duty to Minimum Duty after bootstrap Completion */
+            pDuty->dutycycle1 = MC3_MIN_DUTY;
+            pDuty->dutycycle2 = MC3_MIN_DUTY;
+            pDuty->dutycycle3 = MC3_MIN_DUTY;
             break;  
     }
 
