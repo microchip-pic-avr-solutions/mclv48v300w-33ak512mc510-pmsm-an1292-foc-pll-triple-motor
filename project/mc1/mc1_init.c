@@ -138,16 +138,16 @@ void MCAPP_MC1ControlSchemeConfig(MC1APP_DATA_T *pMCData)
 {
     MCAPP_CONTROL_SCHEME_T *pControlScheme;
     MCAPP_MEASURE_T *pMotorInputs;
-    MCAPP_MOTOR_T *pMotor; 
+    MCAPP_MOTOR_T *pMotor;
     MCAPP_LOAD_T *pLoad;
-    HAL_BOOTSTRAP_T *pBootStrap;
-    
+	HAL_BOOTSTRAP_T *pBootStrap;
+
     pControlScheme = pMCData->pControlScheme;
     pMotorInputs = pMCData->pMotorInputs;
     pMotor = pMCData->pMotor;
     pLoad = pMCData->pLoad;
     pBootStrap = pMCData->pBootStrap;
-    
+ 
     /* Configure Inputs */  
     pControlScheme->pIa = &pMotorInputs->measureCurrent.Ia_actual;
     pControlScheme->pIb = &pMotorInputs->measureCurrent.Ib_actual;

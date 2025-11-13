@@ -66,7 +66,8 @@ extern "C" {
 #define Q30_MAX        1073741824.0f
     
 #define Q15_TO_RADIAN       (float)(M_PI/Q15_MAX)
-#define RPM_TO_ELEC_RAD_PER_S (float)(M_PI/30.0f)    
+#define RPM_TO_ELEC_RAD_PER_S (float)(M_PI/30.0f)
+#define RADIAN_TO_Q15       (float)(Q15_MAX/M_PI)
    
 // </editor-fold>
 

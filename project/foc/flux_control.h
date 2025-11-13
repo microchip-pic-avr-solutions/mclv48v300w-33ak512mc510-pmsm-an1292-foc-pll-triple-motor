@@ -78,7 +78,7 @@ typedef struct
         voltageLimitFW, /* Effective voltage limit for flux weakening */
         fwNum,          /* numerator part of the flux weakening equation */
         fwDen,          /* denominator part of the flux weakening equation */
-        fwEnableSpeed;      /* Flux weakening enable speed */ 
+        fwEnableSpeed;  /* Flux weakening enable speed */ 
 
     const MCAPP_CONTROL_T *pCtrlParam;
     const MCAPP_MOTOR_T *pMotor;
@@ -114,7 +114,7 @@ typedef struct
     float idRef,
           ImaxSquare,
           iqMax;
-    
+ 
     /* Feed-forward or Feedback based flux weakening */
     uint8_t variant;  
     
