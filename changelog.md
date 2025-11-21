@@ -1,3 +1,7 @@
+# mclv48v300w-33ak512mc510-pmsm-an1292-foc-pll-triple-motor v1.0.2
+### Release Highlights
+- Minor edit to the ReadMe - added the interconnection diagram for triple motor control in the introduction section
+
 # mclv48v300w-33ak512mc510-pmsm-an1292-foc-pll-triple-motor v1.0.1
 ### Release Highlights
 - Minor bug fix to bootstrap

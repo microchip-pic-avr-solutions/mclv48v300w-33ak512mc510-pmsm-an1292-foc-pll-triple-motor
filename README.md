@@ -18,6 +18,13 @@ For details about PLL estimator, refer to Microchip application note [AN1292](ht
 
 Enhance your embedded applications with Microchip's high-performance [dsPIC® Digital Signal Controllers (DSCs)](https://www.microchip.com/en-us/products/microcontrollers-and-microprocessors/dspic-dscs). Visit our [Motor Control and Drive page](https://www.microchip.com/en-us/solutions/technologies/motor-control-and-drive) to stay updated on the latest motor control solutions from Microchip.
 
+The below figure illustrates the inteconnections that can be used to interface the external inverters through XPRO#1 connector.
+     <p align="left" >
+     <img  src="images/interconnection.jpg" width="700"></p>
+
+> **Note:** </br>
+>The inverters for Motor #2 and #3 are not supplied by Microchip. For operating Motor #2 and Motor #3, additional MCLV‑48V‑300W boards were interfaced to the primary MCLV‑48V‑300W board through the XPRO#1 connector.
+
 > **Note:** </br>
 >The [dsPIC33AK512MC510](https://www.microchip.com/en-us/product/dsPIC33AK512MC510) is a Digital Signal Controller (DSC) from Microchip Technology and part of the [dsPIC33AK512MPS512](https://www.microchip.com/en-us/product/dsPIC33AK512MPS512) family, designed for motor control and other high-performance embedded system applications.
 </br>
