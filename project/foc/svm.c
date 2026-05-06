@@ -107,15 +107,15 @@ uint8_t MC_CalculateSpaceVectorPhaseShifted( const MC_ABC_T *pABC, float period,
     uint8_t sector = 0;
     
     /*SVM Sector Identification*/
-    if (pABC->a > 0.0)
+    if (pABC->a > 0.0f)
     {
         sector = sector + 1;
     }
-    if (pABC->b > 0.0)
+    if (pABC->b > 0.0f)
     {
         sector = sector + 2;
     }
-    if (pABC->c > 0.0)
+    if (pABC->c > 0.0f)
     {
         sector = sector + 4;
     }
@@ -189,9 +189,9 @@ uint8_t MC_CalculateSpaceVectorPhaseShifted( const MC_ABC_T *pABC, float period,
             pDutyCycleOut->dutycycle3  = Ta;
         break;
         default:
-            pDutyCycleOut->dutycycle1  = 0;
-            pDutyCycleOut->dutycycle2  = 0;
-            pDutyCycleOut->dutycycle3  = 0;
+            pDutyCycleOut->dutycycle1  = 0.0f;
+            pDutyCycleOut->dutycycle2  = 0.0f;
+            pDutyCycleOut->dutycycle3  = 0.0f;
         break;
     }   /* End Of switch - case */
     

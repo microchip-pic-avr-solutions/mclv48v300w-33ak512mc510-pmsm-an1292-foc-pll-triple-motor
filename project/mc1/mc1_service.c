@@ -158,8 +158,8 @@ static void MC1APP_StateMachine(MC1APP_DATA_T *pMCData)
     case MCAPP_RUN:
         /* Compensate motor current offsets */
         pMCData->MCAPP_GetProcessedInputs(pMotorInputs);
-        /* Check for over current fault */
-        if (MCAPP_OverCurrentFault_Detect(pMotorInputs, &pMCData->fault) == 1)
+        /* Check for overcurrent and overvoltage faults */
+        if (MCAPP_Fault_Detect(pMotorInputs, &pMCData->fault) == 1)
         {
             pMCData->appState = MCAPP_FAULT;
             break;
@@ -273,7 +273,7 @@ void __attribute__((__interrupt__,no_auto_psv)) MC1_ADC_INTERRUPT()
 */
 void __attribute__((__interrupt__,no_auto_psv)) _PWM1Interrupt()
 {
-    HAL_MC1ClearPWMPCIFault();
+    pMC1Data->HAL_PWMDisableOutputs();
     mc1.appState = MCAPP_FAULT;
     mc1.fault.faultState = MCAPP_OVERCURRENT_FAULT_DCBUS;
     ClearPWM1IF(); 
@@ -356,7 +356,7 @@ static void MCAPP_MC1ReceivedDataProcess(MC1APP_DATA_T *pMCData)
     }
     else
     {
-        pControlScheme->ctrlParam.targetSpeed = 0.0;      
+        pControlScheme->ctrlParam.targetSpeed = 0.0f;      
     }
     
     

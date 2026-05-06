@@ -80,10 +80,22 @@ void InitPWMGenerators(void)
        0b11 = 1:16 ; 0b10 = 1:8 ;0b01 = 1:4 ; 0b00 = 1:2*/
     PCLKCONbits.DIVSEL = 0;
     /* PWM Master Clock Selection bits
-       0b11 = AFPLLO ; 0b10 = FPLLO ; 0b01 = AFVCO/2 ; 0b00 = FOSC */
+     0 = Normal (1:2 of CPU clock) 
+     1 = Clock Generator 5  */
     PCLKCONbits.MCLKSEL = 1;
     /* Lock bit: 0 = Write-protected registers and bits are unlocked   */
     PCLKCONbits.LOCK = 0;
+    
+    APCLKCON      = 0x0000;
+    /* PWM Clock Divider Selection bits
+       0b11 = 1:16 ; 0b10 = 1:8 ;0b01 = 1:4 ; 0b00 = 1:2*/
+    APCLKCONbits.DIVSEL = 0;
+    /* PWM Master Clock Selection bits
+     0 = Normal (1:2 of CPU clock) 
+     1 = Clock Generator 5  */
+    APCLKCONbits.MCLKSEL = 1;
+    /* Lock bit: 0 = Write-protected registers and bits are unlocked   */
+    APCLKCONbits.LOCK = 0;
 
     /* Initialize Master Phase Register */
     MPHASE       = 0x0000;

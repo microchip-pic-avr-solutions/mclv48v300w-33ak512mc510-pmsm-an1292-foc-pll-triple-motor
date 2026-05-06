@@ -158,8 +158,8 @@ static void MC2APP_StateMachine(MC2APP_DATA_T *pMCData)
     case MCAPP_RUN:
         /* Compensate motor current offsets */
         pMCData->MCAPP_GetProcessedInputs(pMotorInputs);
-        /* Check for over current fault */
-        if (MCAPP_OverCurrentFault_Detect(pMotorInputs, &pMCData->fault) == 1)
+        /* Check for overcurrent and overvoltage faults */
+        if (MCAPP_Fault_Detect(pMotorInputs, &pMCData->fault) == 1)
         {
             pMCData->appState = MCAPP_FAULT;
             break;
@@ -270,7 +270,7 @@ void __attribute__((__interrupt__,no_auto_psv)) MC2_ADC_INTERRUPT()
 */
 void __attribute__((__interrupt__,no_auto_psv)) _PWM6Interrupt()
 {
-    HAL_MC2ClearPWMPCIFault();
+    pMC2Data->HAL_PWMDisableOutputs();
     mc2.appState = MCAPP_FAULT;
     mc2.fault.faultState = MCAPP_OVERCURRENT_FAULT_DCBUS;
     ClearPWM6IF(); 
@@ -353,7 +353,7 @@ static void MCAPP_MC2ReceivedDataProcess(MC2APP_DATA_T *pMCData)
     }
     else
     {
-        pControlScheme->ctrlParam.targetSpeed = 0.0;      
+        pControlScheme->ctrlParam.targetSpeed = 0.0f;      
     }
     
     

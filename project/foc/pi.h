@@ -87,6 +87,9 @@ typedef struct
 {
     /* Integrator sum */
     float integrator;
+    
+    /* Satuartion state */
+    int8_t satState;
 
 } MC_PISTATE_T;
 
@@ -105,6 +108,8 @@ typedef struct
     float   inMeasure;
     /* Output of the PI controller */
     float   output;
+    /* Feedforward term */
+    float   feedForwardTerm;
 } MC_PI_T;
 
 
@@ -112,7 +117,7 @@ typedef struct
 
 // <editor-fold defaultstate="expanded" desc="INTERFACE FUNCTIONS ">
 
-void MC_ControllerPIUpdate(MC_PI_T *);
+void MC_ControllerPIUpdate(MC_PI_T *, int8_t);
 void MC_ControllerPIReset(MC_PI_T *, float resetValue);
 // </editor-fold>
 

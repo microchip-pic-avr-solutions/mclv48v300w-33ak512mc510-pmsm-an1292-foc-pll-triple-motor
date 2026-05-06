@@ -797,66 +797,6 @@ void HAL_MC3MotorInputsRead(MCAPP_MEASURE_T *pMotorInputs)
 }
 
 /**
-* <B> Function: HAL_MC1ClearPWMPCIFault(void)  </B>
-*
-* @brief Function to terminate the PWM Fault PWM event through software
-*        
-* @param none.
-* @return none.
-* 
-* @example
-* <CODE> HAL_MC1ClearPWMPCIFault(); </CODE>
-*
-*/
-void HAL_MC1ClearPWMPCIFault(void)
-{
-    /* write of '1' to SWTERM bit will produce a PCI Fault termination event */
-    PG1F1PCI1bits.SWTERM = 1;
-    PG2F1PCI1bits.SWTERM = 1;
-    PG3F1PCI1bits.SWTERM = 1;  
-}
-
-/**
-* <B> Function: HAL_MC2ClearPWMPCIFault(void)  </B>
-*
-* @brief Function to terminate the PWM Fault PWM event through software
-*        
-* @param none.
-* @return none.
-* 
-* @example
-* <CODE> HAL_MC2ClearPWMPCIFault(); </CODE>
-*
-*/
-void HAL_MC2ClearPWMPCIFault(void)
-{
-    /* write of '1' to SWTERM bit will produce a PCI Fault termination event */
-    PG6F1PCI1bits.SWTERM = 1;
-    PG7F1PCI1bits.SWTERM = 1;
-    PG8F1PCI1bits.SWTERM = 1;  
-}
-
-/**
-* <B> Function: HAL_MC3ClearPWMPCIFault(void)  </B>
-*
-* @brief Function to terminate the PWM Fault PWM event through software
-*        
-* @param none.
-* @return none.
-* 
-* @example
-* <CODE> HAL_MC3ClearPWMPCIFault(); </CODE>
-*
-*/
-void HAL_MC3ClearPWMPCIFault(void)
-{
-    /* write of '1' to SWTERM bit will produce a PCI Fault termination event */
-    APG1F1PCI1bits.SWTERM = 1;
-    APG2F1PCI1bits.SWTERM = 1;
-    APG3F1PCI1bits.SWTERM = 1;  
-}
-
-/**
 * <B> Function: HAL_MC1BootstrapChargeRoutine(MC_DUTYCYCLEOUT_T *, HAL_BOOTSTRAP_T *) </B>
 *
 * @brief Function to execute bootstrap charging routine for MC1

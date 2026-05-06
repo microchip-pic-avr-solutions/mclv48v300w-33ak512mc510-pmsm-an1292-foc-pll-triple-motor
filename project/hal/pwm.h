@@ -138,7 +138,7 @@
 #define MC1_DEADTIME                            (uint32_t)(MC1_DEADTIME_MICROSEC*16*PWM_CLOCK_MHZ)
 #define MC2_DEADTIME                            (uint32_t)(MC2_DEADTIME_MICROSEC*16*PWM_CLOCK_MHZ)
 /*Dead time in terms of Aux PWM clock period for MC3*/  
-#define MC3_DEADTIME                            (uint32_t)(MC3_DEADTIME_MICROSEC*4*PWM_CLOCK_MHZ)    
+#define MC3_DEADTIME                            (uint32_t)(MC3_DEADTIME_MICROSEC*16*PWM_CLOCK_MHZ)    
 /* Loop Time in micro seconds*/
 #define MC1_LOOPTIME_MICROSEC                   (MC1_LOOPTIME_SEC * 1000000.0f)
 #define MC2_LOOPTIME_MICROSEC                   (MC2_LOOPTIME_SEC * 1000000.0f)
@@ -147,7 +147,7 @@
 #define MC1_LOOPTIME_TCY                        (uint32_t)((MC1_LOOPTIME_MICROSEC*8*PWM_CLOCK_MHZ)-16)
 #define MC2_LOOPTIME_TCY                        (uint32_t)((MC2_LOOPTIME_MICROSEC*8*PWM_CLOCK_MHZ)-16)
 /*Loop time in terms of Aux PWM clock period for MC3*/
-#define MC3_LOOPTIME_TCY                        (uint32_t)((MC3_LOOPTIME_MICROSEC*2*PWM_CLOCK_MHZ)-16)
+#define MC3_LOOPTIME_TCY                        (uint32_t)((MC3_LOOPTIME_MICROSEC*8*PWM_CLOCK_MHZ)-16)
 
         
 /****Bootstrap Capacitor Charging Parameters*/
@@ -168,7 +168,7 @@
 #define MC1_TICKLE_CHARGE_DUTY                  (uint32_t)((MC1_TICKLE_CHARGE_TIME_MICROSEC*8*PWM_CLOCK_MHZ) + (MC1_DEADTIME/2))
 #define MC2_TICKLE_CHARGE_DUTY                  (uint32_t)((MC2_TICKLE_CHARGE_TIME_MICROSEC*8*PWM_CLOCK_MHZ) + (MC2_DEADTIME/2)) 
 /*Calculate Bootstrap Capacitor Tickle Charge duty in terms of Aux PWM clock period for MC3*/
-#define MC3_TICKLE_CHARGE_DUTY                  (uint32_t)((MC3_TICKLE_CHARGE_TIME_MICROSEC*2*PWM_CLOCK_MHZ) + (MC3_DEADTIME/2))
+#define MC3_TICKLE_CHARGE_DUTY                  (uint32_t)((MC3_TICKLE_CHARGE_TIME_MICROSEC*8*PWM_CLOCK_MHZ) + (MC3_DEADTIME/2))
 
 /*Giving more room in the maximum duty for phase shunt to the measure current*/
 #define MC1_MIN_DUTY                            (uint32_t)(MC1_DEADTIME + MC1_DEADTIME)

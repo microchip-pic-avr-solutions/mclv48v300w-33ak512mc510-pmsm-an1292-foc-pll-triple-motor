@@ -74,7 +74,7 @@
 */
 void MCAPP_EstimatorInit(MCAPP_ESTIM_INTERFACE_T *pEstimInt )
 {
-    /* */
+    /* Initialize PLL estimator parameters */
     MCAPP_EstimatorPLLInit(pEstimInt->pEstimPLL); 
 }
 

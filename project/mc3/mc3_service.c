@@ -158,8 +158,8 @@ static void MC3APP_StateMachine(MC3APP_DATA_T *pMCData)
     case MCAPP_RUN:
         /* Compensate motor current offsets */
         pMCData->MCAPP_GetProcessedInputs(pMotorInputs);
-        /* Check for over current fault */
-        if (MCAPP_OverCurrentFault_Detect(pMotorInputs, &pMCData->fault) == 1)
+        /* Check for overcurrent and overvoltage faults */
+        if (MCAPP_Fault_Detect(pMotorInputs, &pMCData->fault) == 1)
         {
             pMCData->appState = MCAPP_FAULT;
             break;
@@ -249,7 +249,7 @@ void __attribute__((__interrupt__,no_auto_psv)) MC3_ADC_INTERRUPT()
     
     MC3APP_StateMachine(pMC3Data);
 
-    /* Do not set duty cycle unless inverter 2 is connected*/
+    /* Do not set duty cycle unless inverter 3 is connected*/
     pMC3Data->HAL_PWMSetDutyCycles(pMC3Data->pPWMDuty);
         
     adcBuffer = MC3_ClearADCIF_ReadADCBUF();
@@ -260,7 +260,7 @@ void __attribute__((__interrupt__,no_auto_psv)) MC3_ADC_INTERRUPT()
 /**
 * <B> Function: _PWM6Interrupt()     </B>
 *
-* @brief Function to handle PWM Fault Interrupt from Fault PCI of PWM Gen 6
+* @brief Function to handle PWM Fault Interrupt from Fault PCI of APWM Gen 1
 *        
 * @param none.
 * @return none.
@@ -270,7 +270,7 @@ void __attribute__((__interrupt__,no_auto_psv)) MC3_ADC_INTERRUPT()
 */
 void __attribute__((__interrupt__,no_auto_psv)) _APWM1Interrupt()
 {
-    HAL_MC3ClearPWMPCIFault();
+    pMC3Data->HAL_PWMDisableOutputs();
     mc3.appState = MCAPP_FAULT;
     mc3.fault.faultState = MCAPP_OVERCURRENT_FAULT_DCBUS;
     ClearPWM6IF(); 
@@ -353,7 +353,7 @@ static void MCAPP_MC3ReceivedDataProcess(MC3APP_DATA_T *pMCData)
     }
     else
     {
-        pControlScheme->ctrlParam.targetSpeed = 0.0;      
+        pControlScheme->ctrlParam.targetSpeed = 0.0f;      
     }
     
     

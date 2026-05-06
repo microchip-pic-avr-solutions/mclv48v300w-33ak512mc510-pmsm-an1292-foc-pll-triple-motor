@@ -183,9 +183,6 @@ void HAL_MC1MotorInputsRead(MCAPP_MEASURE_T *);
 void HAL_MC2MotorInputsRead(MCAPP_MEASURE_T *);
 void HAL_MC3MotorInputsRead(MCAPP_MEASURE_T *);
 
-void HAL_MC1ClearPWMPCIFault(void);
-void HAL_MC2ClearPWMPCIFault(void);
-void HAL_MC3ClearPWMPCIFault(void);
 void HAL_TrapHandler(void);
 
 uint8_t HAL_MC1BootstrapChargeRoutine(MC_DUTYCYCLEOUT_T *,HAL_BOOTSTRAP_T *);

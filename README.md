@@ -40,10 +40,10 @@ To clone or download this application firmware on GitHub,
 >In this document, hereinafter this firmware package is referred as **firmware.**
 ### 2.2 Software Tools Used for Testing the firmware
 
-- MPLAB® X IDE **v6.25** 
-- Device Family Pack (DFP): **dsPIC33AK-MC_DFP v1.2.125**
-- Curiosity/Starter Kits Tool Pack : **PKOB4_TP v1.22.1668**
-- MPLAB® XC-DSC Compiler **v3.30**
+- MPLAB® X IDE **v6.30** 
+- Device Family Pack (DFP): **dsPIC33AK-MC_DFP v1.4.172**
+- Curiosity/Starter Kits Tool Pack : **PKOB4_TP v1.23.1741**
+- MPLAB® XC-DSC Compiler **v3.31**
 - MPLAB® X IDE Plugin: **X2C-Scope v1.7.0** 
 > **Note:** </br>
 >The software used for testing the firmware prior to release is listed above. It is recommended to use these or later versions of the tool for building the firmware. All previous versions of Device Family Packs (DFP) and Tool Packs can be downloaded from [Microchip Packs Repository.](https://packs.download.microchip.com/)
@@ -102,7 +102,7 @@ This section describes the hardware setup required for the demonstration.
       <img  src="images/mclvpower.png" width="300"></p>
  
 
-6. The board has an onboard programmer **PICkit™ On Board (PKoBv4)** , which can be used for programming or debugging the microcontroller or dsPIC DSC on the DIM. To use the onboard programmer, connect a micro-USB cable between the Host PC and **connector J16** on the development board.
+6. The board has an onboard programmer **PICkit™ On Board (PKOBv4)** , which can be used for programming or debugging the microcontroller or dsPIC DSC on the DIM. To use the onboard programmer, connect a micro-USB cable between the Host PC and **connector J16** on the development board.
       <p align="left">
      <img  src="images/mclvpkob4.png" width="300"></p>
 
@@ -113,12 +113,12 @@ This section describes the hardware setup required for the demonstration.
 
 ## 4. SOFTWARE SETUP AND RUN
 ### 4.1 Setup: MPLAB X IDE and MPLAB XC-DSC Compiler
-Install **MPLAB X IDE** and **MPLAB XC-DSC Compiler** versions that support the device **dsPIC33AK512MC510** and **PKoBv4.** The MPLAB X IDE, MPLAB XC-DSC Compiler, and X2C-Scope plug-in used for testing the firmware are mentioned in the [Motor Control Application Firmware Required for the Demonstration](#21-motor-control-application-firmware-required-for-the-demonstration) section. 
+Install **MPLAB X IDE** and **MPLAB XC-DSC Compiler** versions that support the device **dsPIC33AK512MC510** and **PKOBv4.** The MPLAB X IDE, MPLAB XC-DSC Compiler, and X2C-Scope plug-in used for testing the firmware are mentioned in the [Motor Control Application Firmware Required for the Demonstration](#21-motor-control-application-firmware-required-for-the-demonstration) section. 
 
 To get help on  
 
 - MPLAB X IDE installation, refer [link](https://developerhelp.microchip.com/xwiki/bin/view/software-tools/ides/x/install-guide/)
-- MPLAB XC-DSC Compiler installation steps, refer [link](https://developerhelp.microchip.com/xwiki/bin/view/software-tools/xc-dsc/install/)
+- MPLAB XC-DSC Compiler installation steps, refer [link](https://developerhelp.microchip.com/xwiki/bin/view/software-tools/compilers/xc-dsc/install/)
 
 If MPLAB IDE v8 or earlier is already installed on your computer, then run the MPLAB driver switcher (Installed when MPLAB®X IDE is installed) to switch from MPLAB IDE v8 drivers to MPLAB X IDE drivers. If you have Windows 8 or 10, you must run the MPLAB driver switcher in **Administrator Mode**. To run the Device Driver Switcher GUI application as administrator, right-click on the executable (or desktop icon) and select **Run as Administrator**. For more details, refer to the MPLAB X IDE help topic **“Before You Begin: Install the USB Device Drivers (For Hardware Tools): USB Driver Installation for Windows Operating Systems.”**
 
@@ -175,9 +175,9 @@ Follow the below instructions, step by step, to set up and run the motor control
      In the **Conf:[default]** category window: 
      - Ensure the selected **Device** is **dsPIC33AK512MC510.**
      - Select the **Connected Hardware Tool** to be used for programming and debugging. 
-     - Select the specific Device Family Pack (DFP) from the available list of **Packs.** In this case, **dsPIC33AK-MC_DFP 1.2.125** is selected. 
+     - Select the specific Device Family Pack (DFP) from the available list of **Packs.** In this case, **dsPIC33AK-MC_DFP 1.4.172** is selected. 
      - Select the specific **Compiler Toolchain** from the available list of **XC-DSC** compilers. 
-     In this case, **XC-DSC(v3.30)** is selected.
+     In this case, **XC-DSC(v3.31)** is selected.
      - After selecting Hardware Tool and Compiler Toolchain, Device Pack, click the button **Apply**
 
      Please ensure that the selected MPLAB® XC-DSC Compiler and Device Pack support the device configured in the firmware
@@ -288,9 +288,9 @@ For additional information, refer following documents or links.
 2. MCLV-48V-300W Development Board User’s Guide [(DS50003297)](https://ww1.microchip.com/downloads/aemDocuments/documents/MCU16/ProductDocuments/UserGuides/Motor-Control-Low-Voltage-48V-300W-Inverter-Board-Users-Guide-DS50003297.pdf)
 3. dsPIC33AK512MC510 Motor Control Dual In-Line Module (DIM) Information Sheet [(DS70005553)](https://ww1.microchip.com/downloads/aemDocuments/documents/MCU16/ProductDocuments/InformationSheet/dsPIC33AK512MC510-Motor-Control-Dual-In-Line-Module-Information-Sheet-DS70005553.pdf)
 4. dsPIC33AK512MPS512 Family datasheet [(DS70005591)](https://ww1.microchip.com/downloads/aemDocuments/documents/MCU16/ProductDocuments/DataSheets/dsPIC33AK512MPS512-Family-Data-Sheet-DS70005591.pdf)
-5. MPLAB® X IDE User’s Guide [(DS50002027)](https://ww1.microchip.com/downloads/en/DeviceDoc/50002027E.pdf) or [MPLAB® X IDE help](https://developerhelp.microchip.com/xwiki/bin/view/software-tools/ides/x/)
+5. MPLAB® X IDE User’s Guide [(DS50002027)](https://ww1.microchip.com/downloads/aemDocuments/documents/DEV/ProductDocuments/UserGuides/MPLAB_X_IDE_Users_Guide_50002027.pdf) or [MPLAB® X IDE help](https://developerhelp.microchip.com/xwiki/bin/view/software-tools/ides/x/)
 6. [MPLAB® X IDE installation](https://developerhelp.microchip.com/xwiki/bin/view/software-tools/ides/x/install-guide/)
-7. [MPLAB® XC-DSC Compiler installation](https://developerhelp.microchip.com/xwiki/bin/view/software-tools/xc-dsc/install/)
+7. [MPLAB® XC-DSC Compiler installation](https://developerhelp.microchip.com/xwiki/bin/view/software-tools/compilers/xc-dsc/install/)
 8. [Installation and setup of X2Cscope plugin for MPLAB X](https://x2cscope.github.io/docs/MPLABX_Plugin.html)
 9. [Microchip Packs Repository](https://packs.download.microchip.com/)
 10. [dsPIC33AK PWM Peripheral Example for Triple Motor Control using Sync PCI Feature](https://mplab-discover.microchip.com/com.microchip.ide.project/com.microchip.mplabx.project.curiosity-33ak512mc510-pwmexample-triple-motor-control)
