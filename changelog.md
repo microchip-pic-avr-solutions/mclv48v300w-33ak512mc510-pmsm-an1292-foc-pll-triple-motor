@@ -1,3 +1,12 @@
+# mclv48v300w-33ak512mc510-pmsm-an1292-foc-pll-triple-motor v1.0.3
+### Release Highlights
+- Minor Improvements to PWM Synchronization and ADC Sampling
+	1. APWM Input clock frequency changed to 400MHz from 100MHz
+	2. ADC Input clock frequency changed to 320MHz from 100MHz
+	3. Configuration improvements in PWM.h and PWM.c files for better synchronization
+- Added feedforward and saturation states to PI
+- Added DC Bus Over Voltage Protection
+
 # mclv48v300w-33ak512mc510-pmsm-an1292-foc-pll-triple-motor v1.0.2
 ### Release Highlights
 - Minor edit to the ReadMe - added the interconnection diagram for triple motor control in the introduction section

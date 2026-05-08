@@ -117,7 +117,7 @@ void InitOscillator (void)
      */
     
     /* PLL Feedback Divider bits (also denoted as 'M', PLL multiplier)
-     * M = (PLLFBDbits.PLLFBDIV)= 150     */
+     * M = (PLLFBDbits.PLLFBDIV)= 100     */
       PLL1DIVbits.PLLFBDIV = 100;
 
     /* PLL Phase Detector I/P Divider Select bits(denoted as 'N1',PLL pre-scaler)
@@ -139,7 +139,6 @@ void InitOscillator (void)
     PLL1CONbits.ON = 1;
     PLL1CONbits.OE = 0;
     PLL1CONbits.OSWEN = 1;
-    VCO1DIV = 1;
     while (PLL1CONbits.OSWEN);
     
     PLL1CONbits.PLLSWEN = 1;
@@ -147,6 +146,62 @@ void InitOscillator (void)
     PLL1CONbits.FOUTSWEN = 1;
     while (PLL1CONbits.PLLSWEN == 1);
     while(PLL1CONbits.CLKRDY == 0);
+    
+/* PLL -2 : In this device Internal RC Oscillator is 8MHz
+     * Also,In all Motor Control Development boards primary oscillator or 
+     * Crystal oscillator output frequency is  8MHz
+     * Hence, FPLL2 (PLL Input frequency)is 8MHz in the application
+     * 
+     * FOSC (Oscillator output frequency),FCY (Device Operating Frequency),
+     * FVCO (VCO Output Frequency )is:
+     *         ( FPLL2 * M)     (8 * 160)           
+     * FVCO = -------------- = -----------  = 1280 MHz
+     *               N1             1    
+     *
+     *         (FPLLI * M)         (8 * 160)          
+     * FPLL = --------------  = -----------    = 320 MHz
+     *        (N1 * N2 * N3)     (1 * 4 * 1)     
+     *
+     * Fsys  = 200 MHz 
+     *
+     * where,
+     * N1 = PLL2DIVbits.REFDIV = 1 
+     * N2 = PLL2DIVbits.POSTDIV1 = 4
+     * N3 = PLL2DIVbits.POSTDIV2 = 1 
+     * M = PLL2DIVbits.FBDIV = 160
+     */
+    
+    /* PLL Feedback Divider bits (also denoted as 'M', PLL multiplier)
+     * M = (PLLFBDbits.PLLFBDIV)= 160     */
+    PLL2DIVbits.PLLFBDIV = 160;
+
+    /* PLL Phase Detector I/P Divider Select bits(denoted as 'N1',PLL pre-scaler)
+     * N1 = PLL2DIVbits.REFDIV = 1        */
+    PLL2DIVbits.PLLPRE = 1;
+
+    /* PLL Output Divider #1 Ratio bits((denoted as 'N2' or POSTDIV#1)
+     * N2 = PLL2DIVbits.POSTDIV1 = 3      */
+    PLL2DIVbits.POSTDIV1 = 4;
+    
+    /* PLL Output Divider #2 Ratio bits((denoted as 'N3' or POSTDIV#2)
+     * N3 = PLL2DIVbits.POSTDIV2 = 1      */
+    PLL2DIVbits.POSTDIV2 = 1;
+    /* Bit 6 = PLL2_EN PLL2 Enable bit
+      1 Enable PLL2
+      0 Disable PLL2 */
+    OSCCTRLbits.PLL2EN = 1;
+    PLL2CONbits.NOSC = 1;
+    PLL2CONbits.ON = 1;
+    PLL2CONbits.OE = 0;
+    PLL2CONbits.OSWEN = 1;
+    while (PLL2CONbits.OSWEN);
+    
+    PLL2CONbits.PLLSWEN = 1;
+    while (PLL2CONbits.PLLSWEN == 1);
+    PLL2CONbits.FOUTSWEN = 1;
+    while (PLL2CONbits.PLLSWEN == 1);
+    while(PLL2CONbits.CLKRDY == 0);
+    
     
     /* Configuring Clock for Individual Peripherals*/
     
@@ -177,13 +232,13 @@ void InitOscillator (void)
     while (CLK5CONbits.DIVSWEN);
     
     /** Clock used for ADC  
-    * Input Clock Selection (NOSC) = 5 :PLL1 FOUT output = 200 MHz
-    * Clock Division (INTDIV) = (1*2)
-    * Final Clock for ADC = 100 MHz */
-    CLK6DIVbits.INTDIV = 1;
+    * Input Clock Selection (NOSC) = 6 :PLL2 FOUT output = 320 MHz
+    * Clock Division (INTDIV) = (0)
+    * Final Clock for ADC = 320 MHz */
+    CLK6DIVbits.INTDIV = 0;
     CLK6CONbits.OE = 1;
     CLK6CONbits.ON = 1;
-    CLK6CONbits.NOSC = 5;
+    CLK6CONbits.NOSC = 6;
     CLK6CONbits.OSWEN = 1; 
     while (CLK6CONbits.OSWEN);
     CLK6CONbits.DIVSWEN =1;

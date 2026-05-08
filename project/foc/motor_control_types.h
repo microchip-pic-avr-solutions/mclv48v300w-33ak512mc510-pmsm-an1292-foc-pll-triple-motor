@@ -82,9 +82,9 @@ typedef struct
 typedef struct
 {
     /* Cosine component */
-    float cos;
+    float cosx;
     /* Sine component */
-    float sin;
+    float sinx;
 
 } MC_SINCOS_T;
 

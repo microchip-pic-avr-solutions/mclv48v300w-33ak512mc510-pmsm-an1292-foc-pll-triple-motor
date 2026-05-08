@@ -4,21 +4,21 @@
    "content":{
       "metaDataVersion":"1.3.0",
       "name":"com.microchip.mplabx.project.mclv48v300w-33ak512mc510-pmsm-an1292-foc-pll-triple-motor",
-      "version":"1.0.2",
+      "version":"1.0.3",
       "displayName":"Triple Motor Control of PMSMs with dsPIC33AK512MC510 using Sensorless FOC and PLL Estimator",
       "projectName":"mclv48v300w-33ak512mc510-pmsm-an1292-foc-pll-triple-motor",
       "shortDescription":"Triple Motor Control of PMSMs with dsPIC33AK512MC510 using Sensorless FOC and PLL Estimator",
       "ide":{
          "name":"MPLABX",
-         "semverRange":">=6.25"
+         "semverRange":">=6.30"
       },
       "compiler":{
          "name":"XC-DSC",
-         "semverRange":">=3.30"
+         "semverRange":">=3.31"
       },
       "dfp":{
          "name":"dsPIC33AK-MC_DFP",
-         "semverRange":"=1.2.125"
+         "semverRange":"=1.4.172"
       },
 	  "configurator": {
          "name": "MCC",

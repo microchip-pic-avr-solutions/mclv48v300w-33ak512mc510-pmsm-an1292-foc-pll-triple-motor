@@ -100,7 +100,7 @@ typedef struct
     
     MC_ANGLE_T OLtheta;             /* Open Loop Angle */
     
-    float qDeltaT;                /* Scaled sampling time */
+    float qDeltaT;                  /* Scaled sampling time */
     
     int32_t OLThetaSum;             /* Open loop Theta Accumulation \
                                      * state variable in Q30*/

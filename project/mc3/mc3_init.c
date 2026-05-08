@@ -3,10 +3,10 @@
  * @file mc3_init.c
  *
  * @brief This module initializes data structure holding motor control
- * parameters required to run motor 1 using field oriented control.
+ * parameters required to run motor 3 using field oriented control.
  * In this application to initialize variable required to run the application.
  *
- * Component: APPLICATION (Motor Control 2 - mc3)
+ * Component: APPLICATION (Motor Control 3 - mc3)
  *
  */
 // </editor-fold>
@@ -182,6 +182,7 @@ void MCAPP_MC3ControlSchemeConfig(MC3APP_DATA_T *pMCData)
     
     /* Initialize fault parameters */
     pMCData->fault.overCurrentFaultLimit = OC_FAULT_LIMIT_PHASE;
+	pMCData->fault.overVoltageFaultLimit = OVER_VOLATGE_FAULT_LIMIT_DCBUS;
     
     /* Initialize startup parameters */
     pControlScheme->startup.lockCurrent = LOCK_CURRENT;
@@ -195,21 +196,24 @@ void MCAPP_MC3ControlSchemeConfig(MC3APP_DATA_T *pMCData)
     pControlScheme->piId.param.ki = D_CURRCNTR_ITERM;                 
     pControlScheme->piId.param.outMax = D_CURRCNTR_OUTMAX;
     pControlScheme->piId.param.outMin = -D_CURRCNTR_OUTMAX;
-    pControlScheme->piId.stateVar.integrator = 0;
+    pControlScheme->piId.stateVar.integrator = 0.0f;
+    pControlScheme->piId.stateVar.satState = 0;
 
     /* Initialize PI controller used for Q axis current control */   
     pControlScheme->piIq.param.kp = Q_CURRCNTR_PTERM;       
     pControlScheme->piIq.param.ki = Q_CURRCNTR_ITERM;                  
     pControlScheme->piIq.param.outMax = Q_CURRCNTR_OUTMAX;
     pControlScheme->piIq.param.outMin = -Q_CURRCNTR_OUTMAX;
-    pControlScheme->piIq.stateVar.integrator = 0;
+    pControlScheme->piIq.stateVar.integrator = 0.0f;
+    pControlScheme->piIq.stateVar.satState = 0;
 
     /* Initialize speed PI controller  */   
     pControlScheme->piSpeed.param.kp = SPEEDCNTR_PTERM;       
     pControlScheme->piSpeed.param.ki = SPEEDCNTR_ITERM;           
     pControlScheme->piSpeed.param.outMax = SPEEDCNTR_OUTMAX;   
     pControlScheme->piSpeed.param.outMin = -SPEEDCNTR_OUTMAX;
-    pControlScheme->piSpeed.stateVar.integrator = 0;
+    pControlScheme->piSpeed.stateVar.integrator = 0.0f;
+    pControlScheme->piSpeed.stateVar.satState = 0;
 
     /* Initialize PLL Estimator */
     pControlScheme->estimator.pCtrlParam  = &pControlScheme->ctrlParam;
@@ -231,12 +235,11 @@ void MCAPP_MC3ControlSchemeConfig(MC3APP_DATA_T *pMCData)
     
     /* Initialize flux weakening parameters */
     pControlScheme->idRefGen.variant = FLUX_WEAKENING_VARIANT;
-    pControlScheme->idRefGen.feedBackFW.fwEnableSpeed = FLUX_WEAKENING_ENABLE_SPEED;
     pControlScheme->idRefGen.feedBackFW.pCtrlParam  = &pControlScheme->ctrlParam;
     pControlScheme->idRefGen.feedBackFW.pVdq       =  &pControlScheme->vdq;
     pControlScheme->idRefGen.feedBackFW.pMotor      = pMCData->pMotor;
     pControlScheme->idRefGen.feedBackFW.voltageMagRef = EFFECTIVE_VOLATGE_FW;
-    pControlScheme->idRefGen.feedBackFW.FWeakPI.param.outMax = 0;
+    pControlScheme->idRefGen.feedBackFW.FWeakPI.param.outMax = 0.0f;
     pControlScheme->idRefGen.feedBackFW.FWeakPI.param.outMin = MAX_FW_NEGATIVE_ID_REF;
     pControlScheme->idRefGen.feedBackFW.FWeakPI.param.kp = FW_PTERM;
     pControlScheme->idRefGen.feedBackFW.FWeakPI.param.ki = FW_ITERM;    

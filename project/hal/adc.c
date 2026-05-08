@@ -73,63 +73,63 @@ void InitializeADCs(void)
     /* Channel Configuration for MC1 - IA */
     /*ADC1 Channel 0 for IA : OA1OUT/AD1AN0/CVDAN2/CMP1A/RP3/RA2 */
     AD1CH0CON1bits.PINSEL = 0;       
-    AD1CH0CON1bits.SAMC = 3;              
+    AD1CH0CON1bits.SAMC = 10;              
     AD1CH0CON1bits.FRAC = 0;
     AD1CH0CON1bits.DIFF = 0;
 
     /* Channel Configuration for MC1 - IB */
     /*ADC2 Channel 0 for IB : OA2OUT/AD2AN0/CVDAN16/CVDTX0/CMP2A/RP17/RB0 */    
     AD2CH0CON1bits.PINSEL = 0;       
-    AD2CH0CON1bits.SAMC = 3;              
+    AD2CH0CON1bits.SAMC = 10;              
     AD2CH0CON1bits.FRAC = 0;
     AD2CH0CON1bits.DIFF = 0;
     
     /* Channel Configuration for MC1 - IBUS */
     /*ADC3 Channel 0 for IBUS : OA3OUT/AD3AN0/CVDAN5/CMP3A/RP6/INT0/RA5 */ 
     AD3CH0CON1bits.PINSEL = 0;      
-    AD3CH0CON1bits.SAMC = 3;      
+    AD3CH0CON1bits.SAMC = 10;      
     AD3CH0CON1bits.FRAC = 0;
     AD3CH0CON1bits.DIFF = 0;
     
     /* Channel Configuration for POT */
     /*ADC2 Channel 1 for POT : AD2AN5/CVDAN31/CVDTX15/RP32/RB15 */     
     AD2CH1CON1bits.PINSEL = 5;      
-    AD2CH1CON1bits.SAMC = 5;              
+    AD2CH1CON1bits.SAMC = 10;              
     AD2CH1CON1bits.FRAC = 0;
     AD2CH1CON1bits.DIFF = 0;
     
     /* Channel Configuration for VBUS */
     /*ADC1 Channel 4 for VBUS : AD3AN4/CVDTX29/RP81/RF0 */     
     AD3CH2CON1bits.PINSEL = 4;   
-    AD3CH2CON1bits.SAMC = 5;         
+    AD3CH2CON1bits.SAMC = 10;         
     AD3CH2CON1bits.FRAC = 0;
     AD3CH2CON1bits.DIFF = 0;
     
     /* Channel Configuration for MC2 - IA */
     /* ADC4 Channel 0 for MC2 IA : DIM:082 - PIN #47 : AD4AN4/CVDAN26/CVDTX10/RP27/SCK2/IOMAF11/IOMBF11/RB10 */
     AD4CH0CON1bits.PINSEL = 4;       
-    AD4CH0CON1bits.SAMC = 3;              
+    AD4CH0CON1bits.SAMC = 10;              
     AD4CH0CON1bits.FRAC = 0;
     AD4CH0CON1bits.DIFF = 0;
     
     /* Channel Configuration for MC2 - IB */
     /* ADC4 Channel 1 for MC2 IB : DIM:084 - PIN #46 : AD4ANN1/AD4AN2/CVDAN23/CVDTX7/CMP4C/IBIAS1/ISRC1/RP24/IOMAF0/RB7 */
     AD4CH1CON1bits.PINSEL = 2;       
-    AD4CH1CON1bits.SAMC = 3;              
+    AD4CH1CON1bits.SAMC = 10;              
     AD4CH1CON1bits.FRAC = 0;
     AD4CH1CON1bits.DIFF = 0;
     
     /* Channel Configuration for MC3 - IA */
     /* ADC4 Channel 2 for MC3 IA : DIM:098 - PIN #43 : PGD1/AD4AN3/CVDAN19/CVDTX3/CMP4A/RP20/SDA1/RB3 */
     AD4CH2CON1bits.PINSEL = 3;       
-    AD4CH2CON1bits.SAMC = 3;              
+    AD4CH2CON1bits.SAMC = 10;              
     AD4CH2CON1bits.FRAC = 0;
     AD4CH2CON1bits.DIFF = 0;
     
     /* Channel Configuration for MC3 - IB */
     /* ADC4 Channel 3 for MC3 IB : DIM:100 - PIN #44 : PGC1/AD4AN0/CVDAN20/CVDTX4/CMP4B/RP21/SCL1/RB4 */
     AD4CH3CON1bits.PINSEL = 0;       
-    AD4CH3CON1bits.SAMC = 3;              
+    AD4CH3CON1bits.SAMC = 10;              
     AD4CH3CON1bits.FRAC = 0;
     AD4CH3CON1bits.DIFF = 0;
     
@@ -154,24 +154,24 @@ void InitializeADCs(void)
     while(AD4CONbits.ADRDY == 0); 
  
     /*AD2CH1 - POT used for ADC Interrupt for MC1*/
-    /* Set ADC interrupt priority IPL 7  */ 
-    _AD2CH1IP = 7;
+    /* Set ADC interrupt priority IPL 6  */ 
+    _AD2CH1IP = 6;
     /* Clear ADC interrupt flag */
     _AD2CH1IF = 0;
     /* Disable the AD2CH1 interrupt  */
     _AD2CH1IE = 0;
     
     /*AD4CH1 - IB used for ADC Interrupt for MC2*/
-    /* Set ADC interrupt priority IPL 7  */ 
-    _AD4CH1IP = 7;
+    /* Set ADC interrupt priority IPL 6  */ 
+    _AD4CH1IP = 6;
     /* Clear ADC interrupt flag */
     _AD4CH1IF = 0;
     /* Disable the AD4CH1 interrupt  */
     _AD4CH1IE = 0;
     
     /*AD4CH3 - IB used for ADC Interrupt for MC3*/
-    /* Set ADC interrupt priority IPL 7  */ 
-    _AD4CH3IP = 7;
+    /* Set ADC interrupt priority IPL 6  */ 
+    _AD4CH3IP = 6;
     /* Clear ADC interrupt flag */
     _AD4CH3IF = 0;
     /* Disable the AD4CH3 interrupt  */

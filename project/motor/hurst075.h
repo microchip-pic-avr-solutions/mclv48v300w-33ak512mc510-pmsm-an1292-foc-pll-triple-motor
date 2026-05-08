@@ -112,14 +112,16 @@ extern "C" {
 #define MAX_OPENLOOP_SPEED_RPM                          MINIMUM_SPEED_RPM
 /* Closed Loop Speed Reference Ramp rate (unit : RPM per second) */
 #define CLOSED_LOOP_SPEED_REF_RAMP_RATE                 2000.0f
-/*Current ramp rate for open loop to closed loop (unit : amps per LOOPTIME_SEC*/
+/*Current ramp rate for open loop to closed loop (unit : amps per MC1_LOOPTIME_SEC*/
 #define CURRENT_RAMP_VALUE                              0.05f
     
 /*Fault parameters*/
 /* Overcurrent fault limit(software) - phase current (unit : amps)*/
-#define OC_FAULT_LIMIT_PHASE                            5.5f  
+#define OC_FAULT_LIMIT_PHASE                            3.5f  
 /* Overcurrent fault limit(comparator and Fault PCI) - bus current (unit : amps)*/
-#define OC_FAULT_LIMIT_DCBUS                            5.0f  
+#define OC_FAULT_LIMIT_DCBUS                            3.0f  
+/* DC Bus Overvoltage fault limit(software) (unit : volts) */
+#define OVER_VOLATGE_FAULT_LIMIT_DCBUS                  52.0f 
     
 /* Rotor locking parameters */
 /* Lock time for Motor's poles alignment (unit : seconds)*/
@@ -133,8 +135,8 @@ extern "C" {
 /* Maximum D-axis current Reference for Flux Weakening (unit : amps)*/
 #define MAX_FW_NEGATIVE_ID_REF                          -(0.9 * NOMINAL_CURRENT_PEAK)
 /* Voltage feedback Flux Weakening controller parameters */
-#define FW_PTERM                                        SPEEDCNTR_PTERM*20 
-#define FW_ITERM                                        SPEEDCNTR_ITERM*20
+#define FW_PTERM                                        SPEEDCNTR_PTERM*20.0f 
+#define FW_ITERM                                        SPEEDCNTR_ITERM*20.0f
 /* Flux Weakening Id reference filter cut off frequency (unit : Hz)*/
 #define FW_ID_FILTER_CUTOFF_FREQUENCY                   100.0f
     

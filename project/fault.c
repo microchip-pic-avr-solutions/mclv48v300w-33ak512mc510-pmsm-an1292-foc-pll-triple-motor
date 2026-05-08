@@ -69,14 +69,14 @@
 // <editor-fold defaultstate="expanded" desc="INTERFACE FUNCTIONS ">
 
 /**
- * <B> Function: MCAPP_OverCurrentFault_Detect(MCAPP_MEASURE_T *pMotorInputs, MCAPP_FAULT_T * pFault)  </B>
+ * <B> Function: MCAPP_Fault_Detect(MCAPP_MEASURE_T *pMotorInputs, MCAPP_FAULT_T * pFault)  </B>
  * 
- * @brief Function to detect overcurrent fault
+ * @brief Function to detect overcurrent and overvoltage fault
  * @param Pointer to the data structure containing measured motor parameters 
  * and fault data structure
  * @return fault status
  */
-bool MCAPP_OverCurrentFault_Detect(MCAPP_MEASURE_T *pMotorInputs, MCAPP_FAULT_T * pFault)
+bool MCAPP_Fault_Detect(MCAPP_MEASURE_T *pMotorInputs, MCAPP_FAULT_T * pFault)
 {
     MCAPP_MEASURE_CURRENT_T *pCurrent = &pMotorInputs->measureCurrent;
     
@@ -84,9 +84,12 @@ bool MCAPP_OverCurrentFault_Detect(MCAPP_MEASURE_T *pMotorInputs, MCAPP_FAULT_T 
     
     float Imax, Ic;
     
-    Ic = -pCurrent->Ia_actual -pCurrent->Ib_actual ;
+    pFault->faultState = MCAPP_FAULT_NONE;
+    faultStatus = 0;
     
-    /*Temp overcurrent fault*/
+    /* Detect Overcurrent fault */
+    Ic = -pCurrent->Ia_actual -pCurrent->Ib_actual ;
+   
     if((pCurrent->Ia_actual > pCurrent->Ib_actual)&&(pCurrent->Ia_actual > Ic)){
         Imax = pCurrent->Ia_actual;
     }
@@ -102,9 +105,12 @@ bool MCAPP_OverCurrentFault_Detect(MCAPP_MEASURE_T *pMotorInputs, MCAPP_FAULT_T 
         pFault->faultState = MCAPP_OVERCURRENT_FAULT_PHASE;
         faultStatus = 1;
     }
-    else{
-        pFault->faultState = MCAPP_FAULT_NONE;
-        faultStatus = 0;
+    
+    /* Detect overvoltage fault */
+    if( pMotorInputs->measureVdc.value > pFault->overVoltageFaultLimit)
+    {
+        pFault->faultState = MCAPP_OVERVOLTAGE_FAULT_DCBUS;
+        faultStatus = 1;
     }
     
     return faultStatus;
