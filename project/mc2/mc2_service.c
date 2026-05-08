@@ -273,7 +273,7 @@ void __attribute__((__interrupt__,no_auto_psv)) _PWM6Interrupt()
     pMC2Data->HAL_PWMDisableOutputs();
     mc2.appState = MCAPP_FAULT;
     mc2.fault.faultState = MCAPP_OVERCURRENT_FAULT_DCBUS;
-    ClearPWM6IF(); 
+    ClearPWM6IF();
 }
 
 /**

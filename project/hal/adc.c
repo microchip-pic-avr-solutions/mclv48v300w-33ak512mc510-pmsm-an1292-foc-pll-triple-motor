@@ -154,24 +154,24 @@ void InitializeADCs(void)
     while(AD4CONbits.ADRDY == 0); 
  
     /*AD2CH1 - POT used for ADC Interrupt for MC1*/
-    /* Set ADC interrupt priority IPL 7  */ 
-    _AD2CH1IP = 7;
+    /* Set ADC interrupt priority IPL 6  */ 
+    _AD2CH1IP = 6;
     /* Clear ADC interrupt flag */
     _AD2CH1IF = 0;
     /* Disable the AD2CH1 interrupt  */
     _AD2CH1IE = 0;
     
     /*AD4CH1 - IB used for ADC Interrupt for MC2*/
-    /* Set ADC interrupt priority IPL 7  */ 
-    _AD4CH1IP = 7;
+    /* Set ADC interrupt priority IPL 6  */ 
+    _AD4CH1IP = 6;
     /* Clear ADC interrupt flag */
     _AD4CH1IF = 0;
     /* Disable the AD4CH1 interrupt  */
     _AD4CH1IE = 0;
     
     /*AD4CH3 - IB used for ADC Interrupt for MC3*/
-    /* Set ADC interrupt priority IPL 7  */ 
-    _AD4CH3IP = 7;
+    /* Set ADC interrupt priority IPL 6  */ 
+    _AD4CH3IP = 6;
     /* Clear ADC interrupt flag */
     _AD4CH3IF = 0;
     /* Disable the AD4CH3 interrupt  */

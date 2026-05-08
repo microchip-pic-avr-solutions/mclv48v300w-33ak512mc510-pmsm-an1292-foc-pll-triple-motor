@@ -273,7 +273,7 @@ void __attribute__((__interrupt__,no_auto_psv)) _APWM1Interrupt()
     pMC3Data->HAL_PWMDisableOutputs();
     mc3.appState = MCAPP_FAULT;
     mc3.fault.faultState = MCAPP_OVERCURRENT_FAULT_DCBUS;
-    ClearPWM6IF(); 
+    ClearAPWM1IF(); 
 }
 
 /**

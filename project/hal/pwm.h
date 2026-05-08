@@ -91,6 +91,9 @@
 #define MC3_PWM_PHASE1              APG1PHASEbits.PHASE 
 #define MC3_PWM_PHASE2              APG2PHASEbits.PHASE
 #define MC3_PWM_PHASE3              APG3PHASEbits.PHASE
+
+/* PWM Period register offset - as per device data sheet */
+#define PWM_PERIOD_REGISTER_OFFSET_COUNTS   16
         
 /* Define to enable PWM Fault PCI for MC1, MC2 and MC3*/        
 #define ENABLE_PWM_FAULT_PCI_MC1
@@ -134,21 +137,20 @@
 #define MC1_LOOPTIME_SEC                        (float)(1.0/MC1_PWMFREQUENCY_HZ)
 #define MC2_LOOPTIME_SEC                        (float)(1.0/MC2_PWMFREQUENCY_HZ)
 #define MC3_LOOPTIME_SEC                        (float)(1.0/MC3_PWMFREQUENCY_HZ)
-/*Dead time in terms of PWM clock period for MC1 and MC2*/  
+/* Dead time in terms of PWM clock period for MC1, MC2 and MC3 */  
 #define MC1_DEADTIME                            (uint32_t)(MC1_DEADTIME_MICROSEC*16*PWM_CLOCK_MHZ)
 #define MC2_DEADTIME                            (uint32_t)(MC2_DEADTIME_MICROSEC*16*PWM_CLOCK_MHZ)
-/*Dead time in terms of Aux PWM clock period for MC3*/  
 #define MC3_DEADTIME                            (uint32_t)(MC3_DEADTIME_MICROSEC*16*PWM_CLOCK_MHZ)    
 /* Loop Time in micro seconds*/
 #define MC1_LOOPTIME_MICROSEC                   (MC1_LOOPTIME_SEC * 1000000.0f)
 #define MC2_LOOPTIME_MICROSEC                   (MC2_LOOPTIME_SEC * 1000000.0f)
 #define MC3_LOOPTIME_MICROSEC                   (MC3_LOOPTIME_SEC * 1000000.0f)
-/*Loop time in terms of PWM clock period for MC1 and MC2*/
-#define MC1_LOOPTIME_TCY                        (uint32_t)((MC1_LOOPTIME_MICROSEC*8*PWM_CLOCK_MHZ)-16)
-#define MC2_LOOPTIME_TCY                        (uint32_t)((MC2_LOOPTIME_MICROSEC*8*PWM_CLOCK_MHZ)-16)
-/*Loop time in terms of Aux PWM clock period for MC3*/
-#define MC3_LOOPTIME_TCY                        (uint32_t)((MC3_LOOPTIME_MICROSEC*8*PWM_CLOCK_MHZ)-16)
-
+/* Loop time in terms of PWM clock period for MC1, MC2 and MC3 
+   A 16-count offset must be deducted from the calculated LOOPTIME_TCY before loading it into the PGxPER register. 
+   For example: PGxPER = (MCx_LOOPTIME_TCY - PWM_PERIOD_REGISTER_OFFSET_COUNTS) */
+#define MC1_LOOPTIME_TCY                        (uint32_t)(MC1_LOOPTIME_MICROSEC*8*PWM_CLOCK_MHZ)
+#define MC2_LOOPTIME_TCY                        (uint32_t)(MC2_LOOPTIME_MICROSEC*8*PWM_CLOCK_MHZ)
+#define MC3_LOOPTIME_TCY                        (uint32_t)(MC3_LOOPTIME_MICROSEC*8*PWM_CLOCK_MHZ)
         
 /****Bootstrap Capacitor Charging Parameters*/
 /*Specify bootstrap charging time in seconds (mention at least 0.01 seconds)*/
@@ -164,11 +166,14 @@
 #define MC1_BOOTSTRAP_CHARGING_COUNTS           (uint32_t)(MC1_BOOTSTRAP_CHARGING_TIME_SECS/MC1_LOOPTIME_SEC)
 #define MC2_BOOTSTRAP_CHARGING_COUNTS           (uint32_t)(MC2_BOOTSTRAP_CHARGING_TIME_SECS/MC2_LOOPTIME_SEC)
 #define MC3_BOOTSTRAP_CHARGING_COUNTS           (uint32_t)(MC3_BOOTSTRAP_CHARGING_TIME_SECS/MC3_LOOPTIME_SEC)
-/*Calculate Bootstrap Capacitor Tickle Charge duty in terms of PWM clock period for MC1 and MC2*/
+/*Calculate Bootstrap Capacitor Tickle Charge duty in terms of PWM clock period for MC1, MC2 and MC3 */
 #define MC1_TICKLE_CHARGE_DUTY                  (uint32_t)((MC1_TICKLE_CHARGE_TIME_MICROSEC*8*PWM_CLOCK_MHZ) + (MC1_DEADTIME/2))
 #define MC2_TICKLE_CHARGE_DUTY                  (uint32_t)((MC2_TICKLE_CHARGE_TIME_MICROSEC*8*PWM_CLOCK_MHZ) + (MC2_DEADTIME/2)) 
-/*Calculate Bootstrap Capacitor Tickle Charge duty in terms of Aux PWM clock period for MC3*/
 #define MC3_TICKLE_CHARGE_DUTY                  (uint32_t)((MC3_TICKLE_CHARGE_TIME_MICROSEC*8*PWM_CLOCK_MHZ) + (MC3_DEADTIME/2))
+        
+/* The PG5 output is used exclusively to synchronize the start-of-Cycle (SOC) events for PG1, PG2, PG3, and APG1, APG2, and APG3. 
+   In this firmware implementation, PG5 serves solely as a synchronization signal and does not generate an independent PWM duty function. */
+#define PWM_SYNC_DUTY                           (uint32_t)(MC1_LOOPTIME_TCY/3);
 
 /*Giving more room in the maximum duty for phase shunt to the measure current*/
 #define MC1_MIN_DUTY                            (uint32_t)(MC1_DEADTIME + MC1_DEADTIME)
