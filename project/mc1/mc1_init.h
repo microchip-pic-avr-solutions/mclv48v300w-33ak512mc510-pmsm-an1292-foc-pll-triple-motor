@@ -123,7 +123,7 @@ typedef struct
     
     HAL_BOOTSTRAP_T
         bootStrap;
-    
+
     MCAPP_MEASURE_T *pMotorInputs;
     MCAPP_MOTOR_T *pMotor;
     MCAPP_CONTROL_SCHEME_T *pControlScheme;

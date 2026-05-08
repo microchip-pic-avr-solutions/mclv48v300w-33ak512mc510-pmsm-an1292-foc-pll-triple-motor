@@ -80,8 +80,8 @@ void MCAPP_EstimatorPLLInit(MCAPP_ESTIMATOR_PLL_T *pEstim)
     pEstim->qThetaStateVar = 0;
     pEstim->qTheta = 0;
     
-    pEstim->omegaFilt = 0;
-    pEstim->qOmegaStateVar = 0;
+    pEstim->omegaFilt = 0.0f;
+    pEstim->qOmegaStateVar = 0.0;
 }
 
 /**
@@ -177,8 +177,8 @@ void MCAPP_EstimatorPLL(MCAPP_ESTIMATOR_PLL_T *pEstim)
                                      - pEstim->vIndbeta );
     
     /* Calculate sine and cosine components of the rotor flux angle */
-    estimSinCos.sin = sin( pEstim->qTheta * Q15_TO_RADIAN); 
-    estimSinCos.cos = cos( pEstim->qTheta * Q15_TO_RADIAN);
+    estimSinCos.sinx = sin( pEstim->qTheta * Q15_TO_RADIAN); 
+    estimSinCos.cosx = cos( pEstim->qTheta * Q15_TO_RADIAN);
 
     /*  Park_BEMF.d =  Clark_BEMF.alpha*cos(Angle) + Clark_BEMF.beta*sin(Rho)
        Park_BEMF.q = -Clark_BEMF.alpha*sin(Angle) + Clark_BEMF.beta*cos(Rho)*/

@@ -80,10 +80,22 @@ void InitPWMGenerators(void)
        0b11 = 1:16 ; 0b10 = 1:8 ;0b01 = 1:4 ; 0b00 = 1:2*/
     PCLKCONbits.DIVSEL = 0;
     /* PWM Master Clock Selection bits
-       0b11 = AFPLLO ; 0b10 = FPLLO ; 0b01 = AFVCO/2 ; 0b00 = FOSC */
+     0 = Normal (1:2 of CPU clock) 
+     1 = Clock Generator 5  */
     PCLKCONbits.MCLKSEL = 1;
     /* Lock bit: 0 = Write-protected registers and bits are unlocked   */
     PCLKCONbits.LOCK = 0;
+    
+    APCLKCON      = 0x0000;
+    /* PWM Clock Divider Selection bits
+       0b11 = 1:16 ; 0b10 = 1:8 ;0b01 = 1:4 ; 0b00 = 1:2*/
+    APCLKCONbits.DIVSEL = 0;
+    /* PWM Master Clock Selection bits
+     0 = Normal (1:2 of CPU clock) 
+     1 = Clock Generator 5  */
+    APCLKCONbits.MCLKSEL = 1;
+    /* Lock bit: 0 = Write-protected registers and bits are unlocked   */
+    APCLKCONbits.LOCK = 0;
 
     /* Initialize Master Phase Register */
     MPHASE       = 0x0000;
@@ -100,17 +112,17 @@ void InitPWMGenerators(void)
     LFSR         = 0x0000;
     /* Initialize Combinational Trigger Register */
     CMBTRIG     = 0x0000;
-    /* Initialize LOGIC CONTROL REGISTER 1 */
+    /* Initialize LOGIC CONTROL REGISTER A */
     LOGCONA     = 0x0000;
-    /* Initialize LOGIC CONTROL REGISTER 1 */
+    /* Initialize LOGIC CONTROL REGISTER B */
     LOGCONB     = 0x0000;
-    /* Initialize LOGIC CONTROL REGISTER 2 */
+    /* Initialize LOGIC CONTROL REGISTER C */
     LOGCONC     = 0x0000;
-    /* Initialize LOGIC CONTROL REGISTER 2 */
+    /* Initialize LOGIC CONTROL REGISTER D */
     LOGCOND     = 0x0000;
-    /* Initialize LOGIC CONTROL REGISTER 3 */
+    /* Initialize LOGIC CONTROL REGISTER E */
     LOGCONE     = 0x0000;
-    /* Initialize LOGIC CONTROL REGISTER 3 */
+    /* Initialize LOGIC CONTROL REGISTER F */
     LOGCONF     = 0x0000;
     /* PWM EVENT OUTPUT CONTROL REGISTER A */
     PWMEVTA     = 0x0000;     
@@ -126,7 +138,7 @@ void InitPWMGenerators(void)
     PWMEVTF     = 0x0000;
     
     /* Generating PWM Event A from PG5 to trigger PG1,PG2 and PG3
-       The raising edge of PG5 PWM output triggers the PG1,2,3 for MC1.
+       The rising edge of PG5 PWM output triggers the PG1,2,3 for MC1.
        The falling edge of PG5 PWM output triggers the APG1,2,3 for MC3
        The EOC of PG5 PWM generator triggers the PG6,7,8 for MC2 */
     /* PWM Event Output Enable bit  
@@ -425,9 +437,9 @@ void InitPWMGenerator1 (void)
        If OVERENL = 1, then OVRDAT<0> provides data for PWM1L */
     PG1IOCON2bits.OVRDAT = 0;
     /* User Output Override Synchronization Control bits
-       00 = User output overrides via the OVRENL/H and OVRDAT<1:0> bits are 
-       synchronized to the local PWM time base (next start of cycle)*/
-    PG1IOCON2bits.OSYNC = 0;
+       10 = User output overrides via the SWAP, OVRENL/H and OVRDAT[1:0] bits 
+            occur when specified by the UPDMOD[2:0]bits in the PGxCON register */
+    PG1IOCON2bits.OSYNC = 2;
     /* Data for PWM1H/PWM1L Pins if FLT Event is Active bits
        If Fault is active, then FLTDAT<1> provides data for PWM1H.
        If Fault is active, then FLTDAT<0> provides data for PWM1L.*/
@@ -546,7 +558,7 @@ void InitPWMGenerator1 (void)
     /* Termination Synchronization Disable bit
        1 = Termination of latched PCI occurs immediately
        0 = Termination of latched PCI occurs at PWM EOC */
-    PG1F1PCI1bits.TSYNCDIS = 0;
+    PG1F1PCI1bits.TSYNCDIS = 1;
     /* Termination Event Selection bits
        001 = Auto-Terminate: Terminate when PCI source transitions from 
              active to inactive */
@@ -642,8 +654,10 @@ void InitPWMGenerator1 (void)
     PG1DCbits.DC           = MC1_MIN_DUTY;
     /* Initialize PWM GENERATOR 1 DUTY CYCLE ADJUSTMENT REGISTER */
     PG1DCA       = 0x0000;
-    /* Initialize PWM GENERATOR 1 PERIOD REGISTER */
-    PG1PER       = MC1_LOOPTIME_TCY;
+    /* Initialize PWM GENERATOR 1 PERIOD REGISTER 
+     * The 16-count offset is not subtracted from MCx_LOOPTIME_TCY prior to loading it into PGxPER. 
+     * This approach extends the PGx End of Cycle (EOC), ensuring that the PG5 synchronization event occurs before the PGx EOC. */
+    PG1PERbits.PER       = MC1_LOOPTIME_TCY;
     /* Initialize PWM GENERATOR 1 DEAD-TIME REGISTER */
     PG1DTbits.DTH = MC1_DEADTIME;
     /* Initialize PWM GENERATOR 1 DEAD-TIME REGISTER */
@@ -709,10 +723,7 @@ void InitPWMGenerator2 (void)
        0 = PWM Generator does not broadcast UPDATE status bit or EOC signal */
     PG2CONbits.MSTEN = 0;
      /* PWM Buffer Update Mode Selection bits 
-       0b010 = Slaved SOC Update Data registers at start of next cycle if a 
-       master update request is received. A master update request will be 
-       transmitted if MSTEN = 1 and UPDATE = 1 for the requesting PWM
-       Generator.. */
+       Update Data registers at start of next PWM cycle if UPDATE = 1. */
 	PG2CONbits.UPDMOD = 0;
     /* PWM Generator Trigger Mode Selection bits
        0b00 = PWM Generator operates in Single Trigger mode
@@ -746,9 +757,9 @@ void InitPWMGenerator2 (void)
        If OVERENL = 1, then OVRDAT<0> provides data for PWM2L */
     PG2IOCON2bits.OVRDAT = 0;
     /* User Output Override Synchronization Control bits
-       00 = User output overrides via the OVRENL/H and OVRDAT<1:0> bits are 
-       synchronized to the local PWM time base (next start of cycle)*/
-    PG2IOCON2bits.OSYNC = 0;
+       10 = User output overrides via the SWAP, OVRENL/H and OVRDAT[1:0] bits 
+            occur when specified by the UPDMOD[2:0]bits in the PGxCON register */
+    PG2IOCON2bits.OSYNC = 2;
     /* Data for PWM2H/PWM2L Pins if FLT Event is Active bits
        If Fault is active, then FLTDAT<1> provides data for PWM2H.
        If Fault is active, then FLTDAT<0> provides data for PWM2L.*/
@@ -866,7 +877,7 @@ void InitPWMGenerator2 (void)
     /* Termination Synchronization Disable bit
        1 = Termination of latched PCI occurs immediately
        0 = Termination of latched PCI occurs at PWM EOC */
-    PG2F1PCI1bits.TSYNCDIS = 0;
+    PG2F1PCI1bits.TSYNCDIS = 1;
     /* Termination Event Selection bits
        001 = Auto-Terminate: Terminate when PCI source transitions from 
              active to inactive */
@@ -902,7 +913,7 @@ void InitPWMGenerator2 (void)
        0 = PCI function is not bypassed */
     PG2F1PCI1bits.BPEN   = 0;
     /* PCI Bypass Source Selection bits(1)
-       000 = PCI control is sourced from PG1 PCI logic when BPEN = 1 */
+       000 = PCI control is sourced from PG2 PCI logic when BPEN = 1 */
     PG2F1PCI1bits.BPSEL   = 0;
     /* PCI Termination Polarity Select bits 
        0 = Inverter, 1 = Non Inverted */
@@ -962,8 +973,10 @@ void InitPWMGenerator2 (void)
     PG2DCbits.DC           = MC1_MIN_DUTY;
     /* Initialize PWM GENERATOR 2 DUTY CYCLE ADJUSTMENT REGISTER */
     PG2DCA       = 0x0000;
-    /* Initialize PWM GENERATOR 2 PERIOD REGISTER */
-    PG2PER       = MC1_LOOPTIME_TCY;
+    /* Initialize PWM GENERATOR 2 PERIOD REGISTER 
+     * The 16-count offset is not subtracted from MCx_LOOPTIME_TCY prior to loading it into PGxPER. 
+     * This approach extends the PGx End of Cycle (EOC), ensuring that the PG5 synchronization event occurs before the PGx EOC. */
+    PG2PERbits.PER       = MC1_LOOPTIME_TCY;
     /* Initialize PWM GENERATOR 2 DEAD-TIME REGISTER */
     PG2DTbits.DTH = MC1_DEADTIME;
     /* Initialize PWM GENERATOR 2 DEAD-TIME REGISTER */
@@ -1028,10 +1041,7 @@ void InitPWMGenerator3 (void)
        0 = PWM Generator does not broadcast UPDATE status bit or EOC signal */
     PG3CONbits.MSTEN = 0;
     /* PWM Buffer Update Mode Selection bits 
-       0b010 = Slaved SOC Update Data registers at start of next cycle if a 
-       master update request is received. A master update request will be 
-       transmitted if MSTEN = 1 and UPDATE = 1 for the requesting PWM
-       Generator.. */
+       Update Data registers at start of next PWM cycle if UPDATE = 1. */
 	PG3CONbits.UPDMOD = 0;
     /* PWM Generator Trigger Mode Selection bits
        0b00 = PWM Generator operates in Single Trigger mode
@@ -1065,9 +1075,9 @@ void InitPWMGenerator3 (void)
        If OVERENL = 1, then OVRDAT<0> provides data for PWM3L */
     PG3IOCON2bits.OVRDAT = 0;
     /* User Output Override Synchronization Control bits
-       00 = User output overrides via the OVRENL/H and OVRDAT<1:0> bits are 
-       synchronized to the local PWM time base (next start of cycle)*/
-    PG3IOCON2bits.OSYNC = 0;
+       10 = User output overrides via the SWAP, OVRENL/H and OVRDAT[1:0] bits 
+            occur when specified by the UPDMOD[2:0]bits in the PGxCON register */
+    PG3IOCON2bits.OSYNC = 2;
     /* Data for PWM3H/PWM3L Pins if FLT Event is Active bits
        If Fault is active, then FLTDAT<1> provides data for PWM3H.
        If Fault is active, then FLTDAT<0> provides data for PWM3L.*/
@@ -1160,7 +1170,7 @@ void InitPWMGenerator3 (void)
        10 = Interrupts CPU at ADC Trigger 1 event
        11 = Time base interrupts are disabled */
     PG3EVT1bits.IEVTSEL = 3;
-    /* ADC Trigger 3 Source is PG3TRIGC Compare Event Enable bit
+    /* ADC Trigger 2 Source is PG3TRIGC Compare Event Enable bit
        0 = PG3TRIGC register compare event is disabled as 
            trigger source for ADC Trigger 2 */
     PG3EVT2bits.ADTR2EN3 = 0;
@@ -1186,7 +1196,7 @@ void InitPWMGenerator3 (void)
     /* Termination Synchronization Disable bit
        1 = Termination of latched PCI occurs immediately
        0 = Termination of latched PCI occurs at PWM EOC */
-    PG3F1PCI1bits.TSYNCDIS = 0;
+    PG3F1PCI1bits.TSYNCDIS = 1;
     /* Termination Event Selection bits
        001 = Auto-Terminate: Terminate when PCI source transitions from 
              active to inactive */
@@ -1222,7 +1232,7 @@ void InitPWMGenerator3 (void)
        0 = PCI function is not bypassed */
     PG3F1PCI1bits.BPEN   = 0;
     /* PCI Bypass Source Selection bits(1)
-       000 = PCI control is sourced from PG1 PCI logic when BPEN = 1 */
+       000 = PCI control is sourced from PG3 PCI logic when BPEN = 1 */
     PG3F1PCI1bits.BPSEL   = 0;
     /* PCI Termination Polarity Select bits 
        0 = Inverter, 1 = Non Inverted */
@@ -1282,8 +1292,10 @@ void InitPWMGenerator3 (void)
     PG3DCbits.DC           = MC1_MIN_DUTY;
     /* Initialize PWM GENERATOR 3 DUTY CYCLE ADJUSTMENT REGISTER */
     PG3DCA       = 0x0000;
-    /* Initialize PWM GENERATOR 3 PERIOD REGISTER */
-    PG3PER       = MC1_LOOPTIME_TCY;
+    /* Initialize PWM GENERATOR 3 PERIOD REGISTER 
+     * The 16-count offset is not subtracted from MCx_LOOPTIME_TCY prior to loading it into PGxPER. 
+     * This approach extends the PGx End of Cycle (EOC), ensuring that the PG5 synchronization event occurs before the PGx EOC. */
+    PG3PERbits.PER       = MC1_LOOPTIME_TCY;
     /* Initialize PWM GENERATOR 3 DEAD-TIME REGISTER */
     PG3DTbits.DTH = MC1_DEADTIME;
     /* Initialize PWM GENERATOR 3 DEAD-TIME REGISTER */
@@ -1329,7 +1341,7 @@ void InitPWMGenerator5 (void)
        000 = PWM Generator produces 1 PWM cycle after triggered */
     PG5CONbits.TRGCNT = 0;
     
-    /* Initialize PWM GENERATOR 1 CONTROL REGISTER */
+    /* Initialize PWM GENERATOR 5 CONTROL REGISTER */
     /* Master Duty Cycle Register Select bit
        1 = Macro uses the MDC register instead of PG5DC
        0 = Macro uses the PG5DC register*/
@@ -1366,18 +1378,18 @@ void InitPWMGenerator5 (void)
        0 = If PCI current limit is active, then the CLDAT<1:0> bits define 
        the PWM output levels */
     PG5IOCON2bits.CLMOD = 0;
-    /* Swap PWM Signals to PWM1H and PWM1L Device Pins bit 
-       0 = PWM1H/L signals are mapped to their respective pins */
+    /* Swap PWM Signals to PWM5H and PWM5L Device Pins bit 
+       0 = PWM5H/L signals are mapped to their respective pins */
     PG5IOCON1bits.SWAP = 0;
-    /* User Override Enable for PWM1H Pin bit
-       0 = PWM Generator provides data for the PWM1H pin*/
+    /* User Override Enable for PWM5H Pin bit
+       0 = PWM Generator provides data for the PWM5H pin*/
     PG5IOCON2bits.OVRENH = 0;
-    /* User Override Enable for PWM1L Pin bit
-       0 = PWM Generator provides data for the PWM1L pin*/
+    /* User Override Enable for PWM5L Pin bit
+       0 = PWM Generator provides data for the PWM5L pin*/
     PG5IOCON2bits.OVRENL = 0;
-    /* Data for PWM1H/PWM1L Pins if Override is Enabled bits
-       If OVERENH = 1, then OVRDAT<1> provides data for PWM1H.
-       If OVERENL = 1, then OVRDAT<0> provides data for PWM1L */
+    /* Data for PWM5H/PWM5L Pins if Override is Enabled bits
+       If OVERENH = 1, then OVRDAT<1> provides data for PWM5H.
+       If OVERENL = 1, then OVRDAT<0> provides data for PWM5L */
     PG5IOCON2bits.OVRDAT = 0;
     /* User Output Override Synchronization Control bits
        00 = User output overrides via the OVRENL/H and OVRDAT<1:0> bits are 
@@ -1411,19 +1423,19 @@ void InitPWMGenerator5 (void)
     /* PWM Generator Output Mode Selection bits
        00 = PWM Generator outputs operate in Complementary mode*/
     PG5IOCON1bits.PMOD = 0;
-    /* PWM1H Output Port Enable bit
+    /* PWM5H Output Port Enable bit
        1 = PWM Generator controls the PWM5H output pin
        0 = PWM Generator does not control the PWM5H output pin */
     PG5IOCON1bits.PENH = 0;
-    /* PWM1L Output Port Enable bit
+    /* PWM5L Output Port Enable bit
        1 = PWM Generator controls the PWM5L output pin
        0 = PWM Generator does not control the PWM5L output pin */
     PG5IOCON1bits.PENL = 0;
-    /* PWM1H Output Polarity bit
+    /* PWM5H Output Polarity bit
        1 = Output pin is active-low
        0 = Output pin is active-high*/
     PG5IOCON1bits.POLH = 0;
-    /* PWM1L Output Polarity bit
+    /* PWM5L Output Polarity bit
        1 = Output pin is active-low
        0 = Output pin is active-high*/
     PG5IOCON1bits.POLL = 0;
@@ -1456,10 +1468,10 @@ void InitPWMGenerator5 (void)
        000 = EOC event is the PWM Generator trigger*/
     PG5EVT1bits.PGTRGSEL = 0;
     
-    /* Initialize PWM GENERATOR 1 EVENT REGISTER */
+    /* Initialize PWM GENERATOR 5 EVENT REGISTER */
     /* FLTIEN: PCI Fault Interrupt Enable bit
-       1 = Fault interrupt is enabled */
-    PG5EVT1bits.FLT1IEN = 1;
+       0 = Fault interrupt is disabled */
+    PG5EVT1bits.FLT1IEN = 0;
     /* PCI Current Limit Interrupt Enable bit
        0 = Current limit interrupt is disabled */
     PG5EVT1bits.CLIEN = 0;
@@ -1503,17 +1515,17 @@ void InitPWMGenerator5 (void)
     PG5LEB      = 0x0000;
     
     /* Initialize PWM GENERATOR 5 PHASE REGISTER */
-    PG5PHASEbits.PHASE  = MC1_MIN_DUTY;
+    PG5PHASEbits.PHASE  = 0;
     /* Initialize PWM GENERATOR 5 DUTY CYCLE REGISTER */
-    PG5DCbits.DC        = (MC1_LOOPTIME_TCY/3);
+    PG5DCbits.DC        = PWM_SYNC_DUTY;
     /* Initialize PWM GENERATOR 5 DUTY CYCLE ADJUSTMENT REGISTER */
     PG5DCA       = 0x0000;
     /* Initialize PWM GENERATOR 5 PERIOD REGISTER */
-    PG5PERbits.PER      = MC1_LOOPTIME_TCY;
+    PG5PERbits.PER      = (MC1_LOOPTIME_TCY - PWM_PERIOD_REGISTER_OFFSET_COUNTS);
     /* Initialize PWM GENERATOR 5 DEAD-TIME REGISTER */
-    PG5DTbits.DTH = MC1_DEADTIME;
+    PG5DTbits.DTH = 0;
     /* Initialize PWM GENERATOR 5 DEAD-TIME REGISTER */
-    PG5DTbits.DTL = MC1_DEADTIME;
+    PG5DTbits.DTL = 0;
 
     /* Initialize PWM GENERATOR 5 TRIGGER A REGISTER */
     PG5TRIGAbits.TRIGA     = MC1_ADC_SAMPLING_POINT;
@@ -1730,7 +1742,7 @@ void InitPWMGenerator6 (void)
     /* Termination Synchronization Disable bit
        1 = Termination of latched PCI occurs immediately
        0 = Termination of latched PCI occurs at PWM EOC */
-    PG6F1PCI1bits.TSYNCDIS = 0;
+    PG6F1PCI1bits.TSYNCDIS = 1;
     /* Termination Event Selection bits
        001 = Auto-Terminate: Terminate when PCI source transitions from 
              active to inactive */
@@ -1822,7 +1834,7 @@ void InitPWMGenerator6 (void)
     /* Initialize PWM GENERATOR 6 DUTY CYCLE ADJUSTMENT REGISTER */
     PG6DCA       = 0x0000;
     /* Initialize PWM GENERATOR 6 PERIOD REGISTER */
-    PG6PER       = MC2_LOOPTIME_TCY;
+    PG6PERbits.PER       = (MC2_LOOPTIME_TCY - PWM_PERIOD_REGISTER_OFFSET_COUNTS);
     /* Initialize PWM GENERATOR 6 DEAD-TIME REGISTER */
     PG6DTbits.DTH = MC2_DEADTIME;
     /* Initialize PWM GENERATOR 6 DEAD-TIME REGISTER */
@@ -1898,7 +1910,7 @@ void InitPWMGenerator7 (void)
        1111 = TRIG bit or PCI Sync function only (no hardware trigger source is selected)
        0000 = Local EOC*/
     /* For PWM Synchronization
-     PWM Generator 6 is in sync with PWM Generator 5*/
+     PWM Generator 7 is in sync with PWM Generator 5*/
     PG7CONbits.SOCS = 0b0101;
     
     /* Clear PWM GENERATOR 7 STATUS REGISTER*/
@@ -2002,8 +2014,8 @@ void InitPWMGenerator7 (void)
     
     /* Initialize PWM GENERATOR 7 EVENT REGISTER */
     /* FLTIEN: PCI Fault Interrupt Enable bit
-       1 = Fault interrupt is enabled */
-    PG7EVT1bits.FLT1IEN = 1;
+       0 = Fault interrupt is disabled */
+    PG7EVT1bits.FLT1IEN = 0;
     /* PCI Current Limit Interrupt Enable bit
        0 = Current limit interrupt is disabled */
     PG7EVT1bits.CLIEN = 0;
@@ -2045,7 +2057,7 @@ void InitPWMGenerator7 (void)
     /* Termination Synchronization Disable bit
        1 = Termination of latched PCI occurs immediately
        0 = Termination of latched PCI occurs at PWM EOC */
-    PG7F1PCI1bits.TSYNCDIS = 0;
+    PG7F1PCI1bits.TSYNCDIS = 1;
     /* Termination Event Selection bits
        001 = Auto-Terminate: Terminate when PCI source transitions from 
              active to inactive */
@@ -2137,7 +2149,7 @@ void InitPWMGenerator7 (void)
     /* Initialize PWM GENERATOR 7 DUTY CYCLE ADJUSTMENT REGISTER */
     PG7DCA       = 0x0000;
     /* Initialize PWM GENERATOR 7 PERIOD REGISTER */
-    PG7PER       = MC2_LOOPTIME_TCY;
+    PG7PERbits.PER       = (MC2_LOOPTIME_TCY - PWM_PERIOD_REGISTER_OFFSET_COUNTS);
     /* Initialize PWM GENERATOR 7 DEAD-TIME REGISTER */
     PG7DTbits.DTH = MC2_DEADTIME;
     /* Initialize PWM GENERATOR 7 DEAD-TIME REGISTER */
@@ -2212,7 +2224,7 @@ void InitPWMGenerator8 (void)
        1111 = TRIG bit or PCI Sync function only (no hardware trigger source is selected)
        0000 = Local EOC*/
     /* For PWM Synchronization
-     PWM Generator 6 is in sync with PWM Generator 5*/
+     PWM Generator 8 is in sync with PWM Generator 5*/
     PG8CONbits.SOCS = 0b0101;
     
     /* Clear PWM GENERATOR 8 STATUS REGISTER*/
@@ -2316,8 +2328,8 @@ void InitPWMGenerator8 (void)
     
     /* Initialize PWM GENERATOR 8 EVENT REGISTER */
     /* FLTIEN: PCI Fault Interrupt Enable bit
-       1 = Fault interrupt is enabled */
-    PG8EVT1bits.FLT1IEN = 1;
+       0 = Fault interrupt is disabled */
+    PG8EVT1bits.FLT1IEN = 0;
     /* PCI Current Limit Interrupt Enable bit
        0 = Current limit interrupt is disabled */
     PG8EVT1bits.CLIEN = 0;
@@ -2359,7 +2371,7 @@ void InitPWMGenerator8 (void)
     /* Termination Synchronization Disable bit
        1 = Termination of latched PCI occurs immediately
        0 = Termination of latched PCI occurs at PWM EOC */
-    PG8F1PCI1bits.TSYNCDIS = 0;
+    PG8F1PCI1bits.TSYNCDIS = 1;
     /* Termination Event Selection bits
        001 = Auto-Terminate: Terminate when PCI source transitions from 
              active to inactive */
@@ -2451,7 +2463,7 @@ void InitPWMGenerator8 (void)
     /* Initialize PWM GENERATOR 8 DUTY CYCLE ADJUSTMENT REGISTER */
     PG8DCA       = 0x0000;
     /* Initialize PWM GENERATOR 8 PERIOD REGISTER */
-    PG8PER       = MC2_LOOPTIME_TCY;
+    PG8PERbits.PER       = (MC2_LOOPTIME_TCY - PWM_PERIOD_REGISTER_OFFSET_COUNTS);
     /* Initialize PWM GENERATOR 8 DEAD-TIME REGISTER */
     PG8DTbits.DTH = MC2_DEADTIME;
     /* Initialize PWM GENERATOR 8 DEAD-TIME REGISTER */
@@ -2550,9 +2562,9 @@ void InitAuxPWMGenerator1 (void)
        If OVERENL = 1, then OVRDAT<0> provides data for APWM1L */
     APG1IOCON2bits.OVRDAT = 0;
     /* User Output Override Synchronization Control bits
-       00 = User output overrides via the OVRENL/H and OVRDAT<1:0> bits are 
-       synchronized to the local PWM time base (next start of cycle)*/
-    APG1IOCON2bits.OSYNC = 0;
+       10 = User output overrides via the SWAP, OVRENL/H and OVRDAT[1:0] bits 
+            occur when specified by the UPDMOD[2:0]bits in the APGxCON register */
+    APG1IOCON2bits.OSYNC = 2;
     /* Data for APWM1H/APWM1L Pins if FLT Event is Active bits
        If Fault is active, then FLTDAT<1> provides data for APWM1H.
        If Fault is active, then FLTDAT<0> provides data for APWM1L.*/
@@ -2671,7 +2683,7 @@ void InitAuxPWMGenerator1 (void)
     /* Termination Synchronization Disable bit
        1 = Termination of latched PCI occurs immediately
        0 = Termination of latched PCI occurs at PWM EOC */
-    APG1F1PCI1bits.TSYNCDIS = 0;
+    APG1F1PCI1bits.TSYNCDIS = 1;
     /* Termination Event Selection bits
        001 = Auto-Terminate: Terminate when PCI source transitions from 
              active to inactive */
@@ -2744,7 +2756,7 @@ void InitAuxPWMGenerator1 (void)
     APG1FFPCI1    = 0x0000;
     
     /* For PWM Synchronization
-     PWM Gen 1 is triggered by the Event A of PWM Gen 5*/
+     APWM Gen 1 is triggered by the Event A of PWM Gen 5*/
     /* AUX PWM GENERATOR 1 Sync PCI REGISTER */
     APG1SPCI1    = 0x0000;
     /* PCI Polarity Select bit 
@@ -2767,7 +2779,9 @@ void InitAuxPWMGenerator1 (void)
     APG1DCbits.DC           = MC3_MIN_DUTY;
     /* Initialize AUX PWM GENERATOR 1 DUTY CYCLE ADJUSTMENT REGISTER */
     APG1DCA       = 0x0000;
-    /* Initialize AUX PWM GENERATOR 1 PERIOD REGISTER */
+    /* Initialize APWM GENERATOR 1 PERIOD REGISTER 
+     * The 16-count offset is not subtracted from MCx_LOOPTIME_TCY prior to loading it into APGxPER. 
+     * This approach extends the APGx End of Cycle (EOC), ensuring that the PG5 synchronization event occurs before the APGx EOC. */
     APG1PERbits.PER       = MC3_LOOPTIME_TCY;
     /* Initialize AUX PWM GENERATOR 1 DEAD-TIME REGISTER */
     APG1DTbits.DTH = MC3_DEADTIME;
@@ -2868,9 +2882,9 @@ void InitAuxPWMGenerator2 (void)
        If OVERENL = 1, then OVRDAT<0> provides data for APWM2L */
     APG2IOCON2bits.OVRDAT = 0;
     /* User Output Override Synchronization Control bits
-       00 = User output overrides via the OVRENL/H and OVRDAT<1:0> bits are 
-       synchronized to the local PWM time base (next start of cycle)*/
-    APG2IOCON2bits.OSYNC = 0;
+       10 = User output overrides via the SWAP, OVRENL/H and OVRDAT[1:0] bits 
+            occur when specified by the UPDMOD[2:0]bits in the APGxCON register */
+    APG2IOCON2bits.OSYNC = 2;
     /* Data for APWM2H/APWM2L Pins if FLT Event is Active bits
        If Fault is active, then FLTDAT<1> provides data for APWM2H.
        If Fault is active, then FLTDAT<0> provides data for APWM2L.*/
@@ -2934,7 +2948,7 @@ void InitAuxPWMGenerator2 (void)
            ADC Trigger 1 */
     APG2EVT1bits.ADTR1EN2 = 0;    
     /* ADC Trigger 1 Source is APG2TRIGA Compare Event Enable bit
-       1 = APG2TRIGA register compare event is disabled as trigger source for 
+       0 = APG2TRIGA register compare event is disabled as trigger source for 
            ADC Trigger 1 */
     APG2EVT1bits.ADTR1EN1 = 0;
     /* Update Trigger Select bits
@@ -2946,8 +2960,8 @@ void InitAuxPWMGenerator2 (void)
     
     /* Initialize AUX PWM GENERATOR 2 EVENT REGISTER */
     /* FLTIEN: PCI Fault Interrupt Enable bit
-       1 = Fault interrupt is enabled */
-    APG2EVT1bits.FLT1IEN = 1;
+       0 = Fault interrupt is disabled */
+    APG2EVT1bits.FLT1IEN = 0;
     /* PCI Current Limit Interrupt Enable bit
        0 = Current limit interrupt is disabled */
     APG2EVT1bits.CLIEN = 0;
@@ -2989,7 +3003,7 @@ void InitAuxPWMGenerator2 (void)
     /* Termination Synchronization Disable bit
        1 = Termination of latched PCI occurs immediately
        0 = Termination of latched PCI occurs at PWM EOC */
-    APG2F1PCI1bits.TSYNCDIS = 0;
+    APG2F1PCI1bits.TSYNCDIS = 1;
     /* Termination Event Selection bits
        001 = Auto-Terminate: Terminate when PCI source transitions from 
              active to inactive */
@@ -3062,7 +3076,7 @@ void InitAuxPWMGenerator2 (void)
     APG2FFPCI1    = 0x0000;
     
     /* For PWM Synchronization
-     PWM Gen 1 is triggered by the Event A of PWM Gen 5*/
+     APWM Gen 2 is triggered by the Event A of PWM Gen 5*/
     /* AUX PWM GENERATOR 2 Sync PCI REGISTER */
     APG2SPCI1    = 0x0000;
     /* PCI Polarity Select bit 
@@ -3085,7 +3099,9 @@ void InitAuxPWMGenerator2 (void)
     APG2DCbits.DC           = MC3_MIN_DUTY;
     /* Initialize AUX PWM GENERATOR 2 DUTY CYCLE ADJUSTMENT REGISTER */
     APG2DCA       = 0x0000;
-    /* Initialize AUX PWM GENERATOR 2 PERIOD REGISTER */
+    /* Initialize APWM GENERATOR 2 PERIOD REGISTER 
+     * The 16-count offset is not subtracted from MCx_LOOPTIME_TCY prior to loading it into APGxPER. 
+     * This approach extends the APGx End of Cycle (EOC), ensuring that the PG5 synchronization event occurs before the APGx EOC. */
     APG2PERbits.PER       = MC3_LOOPTIME_TCY;
     /* Initialize AUX PWM GENERATOR 2 DEAD-TIME REGISTER */
     APG2DTbits.DTH = MC3_DEADTIME;
@@ -3093,7 +3109,7 @@ void InitAuxPWMGenerator2 (void)
     APG2DTbits.DTL = MC3_DEADTIME;
 
     /* Initialize AUX PWM GENERATOR 2 TRIGGER A REGISTER */
-    APG2TRIGB     = 0x0000;
+    APG2TRIGA     = 0x0000;
     /* Initialize AUX PWM GENERATOR 2 TRIGGER B REGISTER */
     APG2TRIGB     = 0x0000;
     /* Initialize AUX PWM GENERATOR 2 TRIGGER C REGISTER */
@@ -3185,9 +3201,9 @@ void InitAuxPWMGenerator3 (void)
        If OVERENL = 1, then OVRDAT<0> provides data for APWM3L */
     APG3IOCON2bits.OVRDAT = 0;
     /* User Output Override Synchronization Control bits
-       00 = User output overrides via the OVRENL/H and OVRDAT<1:0> bits are 
-       synchronized to the local PWM time base (next start of cycle)*/
-    APG3IOCON2bits.OSYNC = 0;
+       10 = User output overrides via the SWAP, OVRENL/H and OVRDAT[1:0] bits 
+            occur when specified by the UPDMOD[2:0]bits in the APGxCON register */
+    APG3IOCON2bits.OSYNC = 2;
     /* Data for APWM3H/APWM3L Pins if FLT Event is Active bits
        If Fault is active, then FLTDAT<1> provides data for APWM3H.
        If Fault is active, then FLTDAT<0> provides data for APWM3L.*/
@@ -3251,7 +3267,7 @@ void InitAuxPWMGenerator3 (void)
            ADC Trigger 1 */
     APG3EVT1bits.ADTR1EN2 = 0;    
     /* ADC Trigger 1 Source is APG3TRIGA Compare Event Enable bit
-       1 = APG3TRIGA register compare event is disabled as trigger source for 
+       0 = APG3TRIGA register compare event is disabled as trigger source for 
            ADC Trigger 1 */
     APG3EVT1bits.ADTR1EN1 = 0;
     /* Update Trigger Select bits
@@ -3263,8 +3279,8 @@ void InitAuxPWMGenerator3 (void)
     
     /* Initialize AUX PWM GENERATOR 3 EVENT REGISTER */
     /* FLTIEN: PCI Fault Interrupt Enable bit
-       1 = Fault interrupt is enabled */
-    APG3EVT1bits.FLT1IEN = 1;
+       0 = Fault interrupt is disabled */
+    APG3EVT1bits.FLT1IEN = 0;
     /* PCI Current Limit Interrupt Enable bit
        0 = Current limit interrupt is disabled */
     APG3EVT1bits.CLIEN = 0;
@@ -3306,7 +3322,7 @@ void InitAuxPWMGenerator3 (void)
     /* Termination Synchronization Disable bit
        1 = Termination of latched PCI occurs immediately
        0 = Termination of latched PCI occurs at PWM EOC */
-    APG3F1PCI1bits.TSYNCDIS = 0;
+    APG3F1PCI1bits.TSYNCDIS = 1;
     /* Termination Event Selection bits
        001 = Auto-Terminate: Terminate when PCI source transitions from 
              active to inactive */
@@ -3379,7 +3395,7 @@ void InitAuxPWMGenerator3 (void)
     APG3FFPCI1    = 0x0000;
     
     /* For PWM Synchronization
-     PWM Gen 1 is triggered by the Event A of PWM Gen 5*/
+     APWM Gen 3 is triggered by the Event A of PWM Gen 5*/
     /* AUX PWM GENERATOR 3 Sync PCI REGISTER */
     APG3SPCI1    = 0x0000;
     /* PCI Polarity Select bit 
@@ -3402,7 +3418,9 @@ void InitAuxPWMGenerator3 (void)
     APG3DCbits.DC           = MC3_MIN_DUTY;
     /* Initialize AUX PWM GENERATOR 3 DUTY CYCLE ADJUSTMENT REGISTER */
     APG3DCA       = 0x0000;
-    /* Initialize AUX PWM GENERATOR 3 PERIOD REGISTER */
+    /* Initialize APWM GENERATOR 3 PERIOD REGISTER 
+     * The 16-count offset is not subtracted from MCx_LOOPTIME_TCY prior to loading it into APGxPER. 
+     * This approach extends the APGx End of Cycle (EOC), ensuring that the PG5 synchronization event occurs before the APGx EOC. */
     APG3PERbits.PER       = MC3_LOOPTIME_TCY;
     /* Initialize AUX PWM GENERATOR 3 DEAD-TIME REGISTER */
     APG3DTbits.DTH = MC3_DEADTIME;
@@ -3410,7 +3428,7 @@ void InitAuxPWMGenerator3 (void)
     APG3DTbits.DTL = MC3_DEADTIME;
 
     /* Initialize AUX PWM GENERATOR 3 TRIGGER A REGISTER */
-    APG3TRIGB     = 0x0000;
+    APG3TRIGA     = 0x0000;
     /* Initialize AUX PWM GENERATOR 3 TRIGGER B REGISTER */
     APG3TRIGB     = 0x0000;
     /* Initialize AUX PWM GENERATOR 3 TRIGGER C REGISTER */

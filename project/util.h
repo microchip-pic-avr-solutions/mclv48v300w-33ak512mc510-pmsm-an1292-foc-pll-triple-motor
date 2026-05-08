@@ -63,11 +63,16 @@ extern "C" {
         
 #define SQRT_3         1.732050807568877f  /* sqrt(3) */
 #define Q15_MAX        32767.0f
+#define Q14_MAX        16384.0f
 #define Q30_MAX        1073741824.0f
-    
-#define Q15_TO_RADIAN       (float)(M_PI/Q15_MAX)
-#define RPM_TO_ELEC_RAD_PER_S (float)(M_PI/30.0f)
-#define RADIAN_TO_Q15       (float)(Q15_MAX/M_PI)
+  
+#define DEGREE_TO_RADIAN        (float)(M_PI/180.0f)
+#define RADIAN_TO_DEGREE        (float)(180.0f/M_PI)
+#define RAD_PER_SEC_TO_RPM      (float)(60.0f/(2.0f*M_PI))
+#define RPM_TO_RAD_PER_SEC      (float)((2.0f*M_PI)/60.0f)
+#define Q15_TO_RADIAN           (float)(M_PI/Q15_MAX)     
+#define RPM_TO_ELEC_RAD_PER_S   (float)(M_PI/30.0f)    
+#define RADIAN_TO_Q15           (float)(Q15_MAX/M_PI) 
    
 // </editor-fold>
 
@@ -94,6 +99,17 @@ typedef union tagSX1632_t
 inline static float SquareFloat(const float x)
 {
     return ( x * x );
+}
+
+/**
+ *
+ * 
+ * @param a first input
+ * @return (x * x)
+ */
+inline static float CubeFloat(const float x)
+{
+    return ( x * x * x );
 }
 
 /**
@@ -143,6 +159,31 @@ inline static void SaturateFloat( float * const input, const float min, const fl
 inline static void LowPassFilter (float input, float filterCoeff, float* output)
 {
 	*output = *output+ ((input - *output) * filterCoeff) ;
+}
+
+
+/**
+* <B> Function:  RampToTarget (float*, float, float) </B>
+*
+* @brief Function generates a linear ramp from the current value to the target value with a specified step size.
+*        
+* @param current: pointer to the current value, which will be updated.
+* @param target: the target value to ramp towards.
+* @param step: the maximum change per function call (step size).
+*
+* @example
+* <CODE> RampToTarget(&currentValue, targetValue, stepSize); </CODE>
+*
+*/
+inline static void RampToTarget(float *current, float target, float step) 
+{
+    float delta = target - *current;
+
+    if (fabs(delta) <= step) {
+        *current = target;  // Close enough ? snap to target
+    } else {
+        *current += (delta > 0) ? step : -step;  // Move in correct direction
+    }
 }
 
 // </editor-fold>

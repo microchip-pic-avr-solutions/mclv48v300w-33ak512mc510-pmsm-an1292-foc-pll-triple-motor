@@ -78,7 +78,7 @@ extern "C" {
 /* Maximum Speed with Flux Weakening (unit : RPM)*/
 #define MAXIMUM_SPEED_RPM                               3700.0f
 /* Motor Rated Phase Current in RMS (unit : amps) */
-#define NOMINAL_CURRENT_PHASE_RMS                       7.0f
+#define NOMINAL_CURRENT_PHASE_RMS                       7.8f
     
 /* Motor Peak Current per phase (unit : amps) */
 #define NOMINAL_CURRENT_PEAK      (float) (NOMINAL_CURRENT_PHASE_RMS * M_SQRT2)
@@ -120,6 +120,8 @@ extern "C" {
 #define OC_FAULT_LIMIT_PHASE                            20.0f  
 /* Overcurrent fault limit(comparator and Fault PCI) - bus current (unit : amps)*/
 #define OC_FAULT_LIMIT_DCBUS                            10.0f  
+/* DC Bus Overvoltage fault limit(software) (unit : volts) */
+#define OVER_VOLATGE_FAULT_LIMIT_DCBUS                  52.0f 
     
 /* Rotor locking parameters */
 /* Lock time for Motor's poles alignment (unit : seconds)*/
@@ -133,8 +135,8 @@ extern "C" {
 /* Maximum D-axis current Reference for Flux Weakening (unit : amps)*/
 #define MAX_FW_NEGATIVE_ID_REF                          -(0.9 * NOMINAL_CURRENT_PEAK)
 /* Voltage feedback Flux Weakening controller parameters */
-#define FW_PTERM                                        SPEEDCNTR_PTERM*30 
-#define FW_ITERM                                        SPEEDCNTR_ITERM*30
+#define FW_PTERM                                        SPEEDCNTR_PTERM*30.0f 
+#define FW_ITERM                                        SPEEDCNTR_ITERM*30.0f
 /* Flux Weakening Id reference filter cut off frequency (unit : Hz)*/
 #define FW_ID_FILTER_CUTOFF_FREQUENCY                   100.0f
     

@@ -54,18 +54,20 @@
 // <editor-fold defaultstate="expanded" desc="INTERFACE FUNCTIONS ">
 
 /**
-* <B> Function: MC_ControllerPIUpdate(MC_PI_T *)  </B>
+* <B> Function: MC_ControllerPIUpdate(MC_PI_T *,int8_t)  </B>
 *
 * @brief Function implementing PI Controller.
 *        
 * @param Pointer to the data structure containing PI Controller inputs.
+* @param Saturation state of inner control loops.
 * @return none.
 * 
 * @example
-* <CODE> MC_ControllerPIUpdate(&piInputId); </CODE>
+* <CODE> MC_ControllerPIUpdate(&piInputId,satState); </CODE>
 *
 */
-void MC_ControllerPIUpdate(MC_PI_T *pPI)
+
+void MC_ControllerPIUpdate(MC_PI_T *pPI, int8_t extSatState)
 {
     float error;
     float outUnsat;
@@ -76,19 +78,27 @@ void MC_ControllerPIUpdate(MC_PI_T *pPI)
     /* Parallel form implementation of PI controller */
     error  = pPI->inReference - pPI->inMeasure;
     
-    outUnsat  = pstateVar->integrator + pParam->kp * error ;
+    outUnsat  = pstateVar->integrator + pParam->kp * error + pPI->feedForwardTerm;
 
     if( outUnsat > pParam->outMax )
     {
         pPI->output = pParam->outMax;
+
+        pstateVar->satState = 1;
     }
     else if( outUnsat < pParam->outMin )
     {
         pPI->output = pParam->outMin;
+
+        pstateVar->satState = -1;
     }
     else
     {
-        pstateVar->integrator = pstateVar->integrator + pParam->ki * error ;
+        if( (extSatState == 0)||( extSatState*error < 0 ) )
+        {
+            pstateVar->integrator = pstateVar->integrator + pParam->ki * error ;
+        }
+        pstateVar->satState = 0;
         pPI->output = outUnsat;
     }
     
@@ -97,14 +107,14 @@ void MC_ControllerPIUpdate(MC_PI_T *pPI)
 /**
 * <B> Function: MC_ControllerPIReset(MC_PI_T *, float)  </B>
 *
-* @brief Function to reset the integrator output from PI Controller.
+* @brief Function to reset PI Controller integrator value.
 *        
 * @param Pointer to the data structure containing PI Controller inputs.
-* @param reset value
+* @param Reset value
 * @return none.
 * 
 * @example
-* <CODE> MC_ControllerPIReset(&pFOC->piId, 0); </CODE>
+* <CODE> MC_ControllerPIReset(&piInput, resetValue); </CODE>
 *
 */
 void MC_ControllerPIReset(MC_PI_T *pPI, float resetValue)

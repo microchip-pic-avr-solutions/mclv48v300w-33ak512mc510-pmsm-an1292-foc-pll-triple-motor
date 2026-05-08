@@ -66,14 +66,18 @@ typedef struct
         polePairs;             /* Pole pairs */
     float
         Rs,                    /* Resistance */
-        Ls;                    /* Stator inductance */
+        Ls,                    /* Average Stator inductance */
+        Ld,                    /* D axis - stator inductance */
+        Lq;                    /* Q axis - stator inductance */
         
     float
         Ke,                    /* Back EMF constant */
+        KT,                    /* Torque Constant */
+        J,                     /* Moment of inertia */
         NominalSpeed,          /* Nominal speed */
         MaxSpeed,              /* Maximum speed */
         MinSpeed,              /* Minimum speed */
-        MaxOLSpeed,            /* Maximum open loop electrical speed */
+        MaxOLSpeed,            /* Maximum open loop speed */
         RatedCurrent;          /* Current drawn at rated load */
 
 } MCAPP_MOTOR_T;

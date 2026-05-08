@@ -3,9 +3,9 @@
  * @file mc3_user_params.h
  *
  * @brief This file has definitions to be configured by the user for spinning
- * 		  motor 2 using field oriented control.
+ * 		  motor 3 using field oriented control.
  *
- * Component: APPLICATION (motor control 2 - mc3)
+ * Component: APPLICATION (motor control 3 - mc3)
  * Motor : To be selected from '#define MOTOR  1'
  *
  */

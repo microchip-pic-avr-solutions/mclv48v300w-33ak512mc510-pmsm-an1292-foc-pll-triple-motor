@@ -3,10 +3,10 @@
  * @file mc3_init.h
  *
  * @brief This module initializes data structure holding motor control
- * parameters required to run motor 1 using field oriented control.
+ * parameters required to run motor 3 using field oriented control.
  * In this application to initialize variable required to run the application.
  *
- * Component: APPLICATION (Motor Control 1 - mc3)
+ * Component: APPLICATION (Motor Control 3 - mc3)
  *
  */
 // </editor-fold>

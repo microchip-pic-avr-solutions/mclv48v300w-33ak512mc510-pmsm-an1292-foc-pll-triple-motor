@@ -116,7 +116,7 @@ void MCAPP_FluxWeakeningControl(MCAPP_ID_REFERENCE_T *pIdRefGen)
     }
     else
     {
-        pIdRefGen->idRef = 0.0;
+        pIdRefGen->idRef = 0.0f;
     }
     
     /* Dynamic limiting for Q axis current */ 
@@ -141,7 +141,7 @@ void MCAPP_FluxWeakeningControl(MCAPP_ID_REFERENCE_T *pIdRefGen)
 */
 static void MCAPP_FeedForwardFluxWeakeningInit(MCAPP_FLUX_WEAKENING_FF_T *pFdweak)
 {
-    pFdweak->IdRef = 0;
+    pFdweak->IdRef = 0.0f;
 }
 
 /**
@@ -194,7 +194,7 @@ static float  MCAPP_FeedForwardFluxWeakening(MCAPP_FLUX_WEAKENING_FF_T *pFdWeak)
     }
     else
     {
-        IdRefOut = 0.0;
+        IdRefOut = 0.0f;
     }
     
         /*Filter for the FW Id reference current*/
@@ -237,13 +237,13 @@ static float MCAPP_FeedBackFluxWeakening(MCAPP_FLUX_WEAKENING_VOLT_FB_T *pFdWeak
         /* Compute PI output: pFdWeak->IdRef */
         pFdWeak->FWeakPI.inReference = pFdWeak->voltageMagRef;
         pFdWeak->FWeakPI.inMeasure = pFdWeak->voltageMag;
-        MC_ControllerPIUpdate(&pFdWeak->FWeakPI);
+        MC_ControllerPIUpdate(&pFdWeak->FWeakPI,0);
         IdRefOut = pFdWeak->FWeakPI.output;
         
     }
     else
     {
-        IdRefOut = 0 ;
+        IdRefOut = 0.0f ;
         
         /* Reset PI integrator to Nominal Id reference value for smooth transition
          * when switching to PI output computation. */

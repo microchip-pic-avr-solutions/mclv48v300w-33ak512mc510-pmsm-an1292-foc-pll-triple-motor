@@ -70,7 +70,8 @@ typedef enum
 {
     MCAPP_FAULT_NONE = 0,               /** No Fault  */
     MCAPP_OVERCURRENT_FAULT_PHASE = 1,  /** Over Current fault on phase - software */
-    MCAPP_OVERCURRENT_FAULT_DCBUS = 2,  /** Over Current fault on DC Bus - Comparator + PCI */        
+    MCAPP_OVERCURRENT_FAULT_DCBUS = 2,  /** Over Current fault on DC Bus - Comparator + PCI */
+    MCAPP_OVERVOLTAGE_FAULT_DCBUS = 3,  /** Over Voltage fault on DC Bus */
 
 } MCAPP_FAULT_STATE_T;
    
@@ -78,7 +79,8 @@ typedef enum
 typedef struct
 {
     float 
-        overCurrentFaultLimit;    /* Over current fault limit */
+        overCurrentFaultLimit,    /* Over current fault limit */
+        overVoltageFaultLimit;    /* Over voltage fault limit */
     
     MCAPP_FAULT_STATE_T
         faultState;             /* Fault state*/
@@ -89,7 +91,7 @@ typedef struct
 
 // <editor-fold defaultstate="expanded" desc="INTERFACE FUNCTIONS ">
 
-bool MCAPP_OverCurrentFault_Detect(MCAPP_MEASURE_T *, MCAPP_FAULT_T*);
+bool MCAPP_Fault_Detect(MCAPP_MEASURE_T *, MCAPP_FAULT_T*);
     
 // </editor-fold>
 
